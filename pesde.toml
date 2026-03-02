@@ -1,0 +1,24 @@
+name = "bizwiz3/orca"
+version = "0.1.0"
+description = "express like luau backend framework"
+authors = ["@loej030 <https://github.com/BizWiz3>"]
+license = "MIT"
+repository = "https://github.com/BizWiz3/nova"
+private = false
+includes =[
+    "pesde.toml",
+    "README.md",
+    "LICENSE",
+    "src/**/*.luau"
+]
+
+[target]
+environment = "lune"
+lib = "src/index.luau"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+[dependencies]
+lunemon = { name = "bizwiz3/lunemon", version = "^0.1.1" }
+

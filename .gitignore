@@ -1,0 +1,9 @@
+
+# env files
+.env
+.env.local
+.env.development
+
+# packages
+lune_packages/
+luau_packages/
