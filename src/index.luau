@@ -1,3 +1,6 @@
+--!optimize 2
+--!native
+
 local net = require("@lune/net")
 local serde = require("@lune/serde")
 local fs = require("@lune/fs")
@@ -17,7 +20,7 @@ Nova.__index = Nova
 
 local baseDir = "./app"
 local absolutePath = process.cwd
-local srcPath = "/lune_packages/.pesde/bizwiz3+nova/0.1.0/nova/src"
+local srcPath = "/lune_packages/.pesde/bizwiz3+nova/0.1.2/nova/src"
 local routePatterns = {}
 
 Nova.chain = require("./chain")
@@ -84,7 +87,10 @@ local function buildRouter(currentDir: string, currentRoute: string)
     local hasRouteFile = false
 
     for _, item in ipairs(items) do
-        if item == "route.luau" then hasRouteFile = true; break end
+        if item == "route.luau" then 
+            hasRouteFile = true 
+            break 
+        end
     end
 
     if hasRouteFile then
