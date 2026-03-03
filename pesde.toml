@@ -1,5 +1,5 @@
 name = "bizwiz3/nova"
-version = "0.1.0"
+version = "0.1.1"
 description = "A high-performance, filesystem-based web framework built specifically for the Lune runtime."
 authors = ["BizWiz3 (https://github.com/BizWiz3)", "Leoj030 (https://github.com/Leoj030)"]
 license = "MIT"
@@ -21,5 +21,4 @@ lib = "src/index.luau"
 default = "https://github.com/pesde-pkg/index"
 
 [dependencies]
-lunemon = { name = "bizwiz3/lunemon", version = "^0.1.1" }
 
