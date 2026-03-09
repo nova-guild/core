@@ -32,7 +32,7 @@ pesde install
 
 #### Usage
 
-In your root project directory, create your entry file.
+In your root project or `src/` directory, create your entry file.
 
 *Example:* `index.luau`
 
@@ -43,7 +43,7 @@ local Nova = require("@path/to/nova")
 
 local app = Nova.new(8080)
 
-app:listen() -- Server is running
+app:listen() -- To run the server
 ```
 
 ### Install a boilerplate
@@ -66,7 +66,7 @@ pesde install
 
 ## Route Definition
 
-Nova organizes routes by folder. To create a route at `/`, you must create an `app/` directory first in your root project directory.
+Nova organizes routes by folder. To create a route at `/`, you must create an `app/` directory first in your root project or `src/` directory.
 
 Create a luau file inside the `app/` directory and name it `route.luau`.
 
@@ -74,11 +74,22 @@ Create a luau file inside the `app/` directory and name it `route.luau`.
 
 ```sh
 project-dir/
-├── app/
-    └── route.luau
+├── src/
+    ├── app/
+    |   └── route.luau
+    └── index.luau    
 ```
 
-*Paste the code below:*
+*Or like this*
+
+```sh
+project-dir/
+├── app/
+|    └── route.luau
+└── index.luau
+```
+
+*Paste the code below inside the `route.luau`:*
 
 ```lua
 local Nova = require("@path/to/nova")
@@ -122,3 +133,6 @@ Route.Get = Nova.chain({ validate }, function(req)
     return Nova.response({ data = "Authorized access" })
 end)
 ```
+
+*More info about middlewares soon.*
+*Happy Coding*
