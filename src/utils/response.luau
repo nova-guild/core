@@ -1,3 +1,5 @@
+--!optimize 2
+
 local Types = require("../types")
 
 --[[

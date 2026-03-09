@@ -1,3 +1,4 @@
+--!optimize 2
 
 local serde = require("@lune/serde")
 local fs = require("@lune/fs")

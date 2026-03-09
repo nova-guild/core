@@ -13,6 +13,13 @@ local findMainDir = require("./utils/findMainDir")
 local generateRoute = require("./core/generateRoute")
 local generateAlias = require("./utils/generateAlias")
 
+export type Next = types.Next
+export type Nova = types.Nova
+export type Request = types.Request
+export type RequestWith<T> = types.RequestWith<T>
+export type ResponseBody = types.ResponseBody
+export type ResponseOptions = types.ResponseOptions
+
 local Nova = {}
 Nova.__index = Nova
 
@@ -26,7 +33,7 @@ function Nova.new(port: number, middlewares: { (req: types.Request, next: types.
 
     loadEnv()
 
-    return self :: types.Nova
+    return self :: Nova
 end
 
 function Nova:listen(handler: () -> ())
@@ -130,8 +137,12 @@ function Nova:listen(handler: () -> ())
                             finalHeaders[key] = value
                         end
                     end
+
                     local finishReq = os.clock()
-                    print(string.format("Request Done in %.4f ms", (finishReq - startReq) * 1000))
+                    
+                    if process.env.LOGGER == "dev" then 
+                        print(string.format("Request Done in %.4f ms", (finishReq - startReq) * 1000))
+                    end
 
                     return {
                         status = status,
