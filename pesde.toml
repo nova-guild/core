@@ -1,5 +1,5 @@
 name = "bizwiz3/nova"
-version = "0.2.1"
+version = "0.3.0"
 description = "A high-performance, filesystem-based web framework built specifically for the Lune runtime."
 authors = ["BizWiz3 (https://github.com/BizWiz3)", "Leoj030 (https://github.com/Leoj030)"]
 license = "MIT"
