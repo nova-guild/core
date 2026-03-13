@@ -2,6 +2,7 @@
 
 local Types = require("../types")
 local Response = require("../utils/response")
+local serde = require("@lune/serde")
 
 local staticRoutes = {}
 local routeTreeRoot = {
@@ -64,7 +65,7 @@ local function routerDispatcher(request)
     local req = {
         method = request.method,
         path = cleanPath,
-        body = request.body,
+        body = serde.decode("json", request.body),
         headers = request.headers,
         query = request.query or {},
         params = {}

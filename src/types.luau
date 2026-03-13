@@ -1,3 +1,13 @@
+export type Next = () -> ()
+
+export type Nova = {
+    --[[
+        Starts the server
+    ]]
+    listen: (self: Nova, handler: () -> ()) -> ()
+}
+
+-- Request
 export type RequestWith<T> = {
     method: string,
     path: string,
@@ -9,21 +19,40 @@ export type RequestWith<T> = {
 
 export type Request = RequestWith<{any}>
 
+-- Response
 export type ResponseBody = {any} | string
 
 export type ResponseOptions = {
     status: number?,
-    isHtml: boolean?,
     headers: { [string]: string }?
 }
 
-export type Next = () -> ()
-
-export type Nova = {
+export type Response = {
     --[[
-        This is the listen handler
+        Respond with a string
     ]]
-    listen: (self: Nova, handler: () -> ()) -> ()
+    send: (body: string, config: ResponseOptions?) -> (),
+
+    --[[
+        Respond with a json
+    ]]
+    json: (body: {any}, config: ResponseOptions?) -> (),
+
+    --[[
+        Respond with an html
+    ]]
+    html: (body: string, config: ResponseOptions?) -> (),
+
+    --[[
+        Respond with a css
+    ]]
+    js: (body: string, config: ResponseOptions?) -> (),
+
+    --[[
+        Respond with a js
+    ]]
+    css: (body: string, config: ResponseOptions?) -> (),
 }
+
 
 return {}

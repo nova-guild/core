@@ -4,9 +4,6 @@ type Middleware = (req: any, next: () -> ()) -> any?
 type Handler = (req: any) -> any
 
 local function chain(middlewares: { Middleware }?, finalHandler: Handler)
-    -- GUARD CLAUSE: 
-    -- If middlewares is nil (not passed), default to an empty table {}.
-    -- This prevents the "attempt to index nil" error.
     local queue = middlewares or {}
 
     return function(req: any)
@@ -16,7 +13,6 @@ local function chain(middlewares: { Middleware }?, finalHandler: Handler)
         local function runNext()
             local currentIndex = index
             
-            -- Now we read from 'queue', which is guaranteed to be a table.
             local middleware = queue[currentIndex]
             index += 1 
 
@@ -39,8 +35,6 @@ local function chain(middlewares: { Middleware }?, finalHandler: Handler)
                     error(`[Nova] Middleware at index {currentIndex} failed to call next() or return a response!`)
                 end
             else
-                -- If queue is empty, we land here immediately.
-                -- This executes the router (finalHandler).
                 local result = finalHandler(req)
                 
                 if result ~= nil then
