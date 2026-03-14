@@ -1,0 +1,15 @@
+name = "bizwiz3/novatest"
+version = "0.1.0"
+authors = ["BizWiz3"]
+license = "MIT"
+
+[target]
+environment = "lune"
+bin = "src/index.luau"
+
+[indices]
+default = "https://github.com/pesde-pkg/index"
+
+[dependencies]
+nova = { name = "bizwiz3/nova", version = "^0.3.1" }
+lunemon = { name = "bizwiz3/lunemon", version = "^0.1.1" }
