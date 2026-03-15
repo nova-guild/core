@@ -1,8 +1,8 @@
 # Nova
 
 [![Static Badge](https://img.shields.io/badge/pesde-bizwiz3/nova-F19D1E?style=flat)](https://pesde.dev/packages/bizwiz3/nova)
-[![Static Badge](https://img.shields.io/badge/github-bizwiz3/benchmark-blue?style=flat)](https://github.com/BizWiz3/nova-test)
-[![Static Badge](https://github.com/BizWiz3/nova-test/actions/workflows/build.yml/badge.svg)](https://github.com/BizWiz3/nova-test/actions/workflows/build.yml)
+[![Static Badge](https://img.shields.io/badge/github-bizwiz3/benchmark-blue?style=flat)](https://github.com/BizWiz3/nova)
+[![Static Badge](https://github.com/BizWiz3/nova/actions/workflows/build.yml/badge.svg)](https://github.com/BizWiz3/nova/actions/workflows/build.yml)
 
 **A high-performance, filesystem-based web framework built specifically for the [Lune](https://lune-org.github.io/docs/) runtime.**
 

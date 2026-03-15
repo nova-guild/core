@@ -61,7 +61,7 @@ jobs:
       - name: Parse Resource Usage Stats
         if: always()
         run: |
-          STATS_FILE=${{ github.workspace }}/nova-test/stats.log   # <-- updated path
+          STATS_FILE=${{ github.workspace }}/benchmark/stats.log
           if [ -f "$STATS_FILE" ] && [ -s "$STATS_FILE" ]; then
             PEAK_CPU=$(awk -F',' '{gsub(/[^0-9.]/, "", $1); print $1}' $STATS_FILE \
               | sort -g | tail -1)
@@ -86,7 +86,7 @@ jobs:
       - name: Generate Action Summary
         if: always()
         run: |
-          SUMMARY_FILE=${{ github.workspace }}/nova-test/summary.json   # <-- updated path
+          SUMMARY_FILE=${{ github.workspace }}/benchmark/summary.json
           echo "## Nova Performance Summary" >> $GITHUB_STEP_SUMMARY
 
           if [ -f "$SUMMARY_FILE" ] && [ -s "$SUMMARY_FILE" ]; then
