@@ -1,8 +1,8 @@
 # Nova
 
 [![Static Badge](https://img.shields.io/badge/pesde-bizwiz3/nova-F19D1E?style=flat)](https://pesde.dev/packages/bizwiz3/nova)
-[![Static Badge](https://img.shields.io/badge/github-bizwiz3/benchmark-blue?style=flat)](https://github.com/BizWiz3/nova-test)
-[![Static Badge](https://github.com/BizWiz3/nova-test/actions/workflows/build.yml/badge.svg)](https://github.com/BizWiz3/nova-test/actions/workflows/build.yml)
+[![Static Badge](https://img.shields.io/badge/github-bizwiz3/benchmark-blue?style=flat)](https://github.com/BizWiz3/nova)
+[![Static Badge](https://github.com/BizWiz3/nova/actions/workflows/build.yml/badge.svg)](https://github.com/BizWiz3/nova/actions/workflows/build.yml)
 
 **A high-performance, filesystem-based web framework built specifically for the [Lune](https://lune-org.github.io/docs/) runtime.**
 
@@ -18,6 +18,7 @@
   - [Route Definition](#route-definition)
   - [Routing Conventions](#routing-conventions)
   - [Middleware Chaining](#middleware-chaining)
+  - [Performance Benchmarks](#performance-benchmarks)
 
 ## Installation & Usage
 
@@ -135,4 +136,23 @@ end)
 ```
 
 *More info about middlewares soon.*
-*Happy Coding*
+
+## Performance Benchmarks
+
+<!-- BENCHMARK_START -->
+### Latest Performance (Auto-updated)
+
+#### 📊 HTTP / k6 Metrics
+
+| Total Requests | Requests/sec | p95 Latency | p90 Latency | Median Latency | Avg Latency | Success Rate | Failed Requests | Throughput |
+| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
+| **459225** | **5741.61 req/s** | **22.51ms** | **17.85ms** | **9.53ms** | **41.09ms** | **99.00%** | **242** | **0.70 MB/s** |
+
+#### 🖥️ Container Resource Usage (during benchmark)
+
+| Peak CPU | Avg CPU | Peak Memory | Avg Memory % |
+| :--- | :--- | :--- | :--- |
+| 138.66% | 43.61% | 72.48MiB | 0.21% |
+
+_Last Benchmarked: Sun Mar 15 03:22:46 UTC 2026_
+<!-- BENCHMARK_END -->
