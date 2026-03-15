@@ -9,7 +9,7 @@ function SimpleWeb.Get(req: Nova.RequestWith<{ file: string }>)
     local filePath = `{process.cwd}/src/web/{filename}`
 
     if not fs.isFile(filePath) then
-        return Nova.response.new("File Not Found", { status = 400 })
+        return Nova.response.json({ error = "File Not Found" }, { status = 400 })
     end
 
     local contentType = "text/html"

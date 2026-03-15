@@ -18,7 +18,7 @@ local function generateRoute(currentDir: string, currentRoute: string)
             
             local routeKey = currentRoute == "" and "/" or currentRoute
             
-            local routeModule = require(modulePath)
+            local routeModule = require(modulePath) :: string
 
             routing.registerRoute(routeKey, routeModule)
             
