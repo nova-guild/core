@@ -8,7 +8,7 @@ local serde = require("@lune/serde")
 ]]
 local Response = {} :: Types.Response
 
-local function generateResponse(body: Types.ResponseBody, config: Types.ResponseOptions?) 
+local function generateResponse(body: Types.ResponseBody, config: Types.ResponseOptions) 
     return {
         body = body, 
         config = { 

@@ -97,7 +97,7 @@ local function routerDispatcher(request)
         if type(handler) == "function" then
             return handler(req)
         else
-            return Response({ error = "Method Not Allowed" }, { status = 405 })
+            return Response.json({ error = "Method Not Allowed" }, { status = 405 })
         end
     end
 
@@ -111,13 +111,13 @@ local function routerDispatcher(request)
             req.params[currentNode.dynamicName] = segment
             currentNode = currentNode.dynamicChild
         else
-            return Response({ error = "Not Found" }, { status = 404 })
+            return Response.json({ error = "Not Found" }, { status = 404 })
         end
     end
 
     local matchedModule = currentNode.module
     if not matchedModule then 
-        return { body = { error = "Not Found" }, config = { status = 404 } } 
+        return Response.json({ error = "Not Found" }, { status = 404 }) 
     end
 
     local handler = matchedModule[method]
@@ -127,7 +127,7 @@ local function routerDispatcher(request)
     end
 
     if type(handler) ~= "function" then 
-        return { body = { error = "Method Not Allowed" }, config = { status = 405 } } 
+        return Response.json({ error = "Method Not Allowed" }, { status = 405 })
     end
 
     return handler(req)
