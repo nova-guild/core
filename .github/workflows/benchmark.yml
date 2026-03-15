@@ -16,7 +16,7 @@ jobs:
 
       - name: Build and Start Nova Server
         run: |
-          docker build -t nova-app .
+          docker build -t nova-app ./benchmark
           docker run -d --network="host" \
             --name nova-running-app \
             -e LOGGER=dev \
