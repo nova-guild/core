@@ -13,7 +13,7 @@
         <img src="https://github.com/BizWiz3/nova/actions/workflows/ci.yml/badge.svg">
     </a>
     <h3>
-        A high-performance, filesystem-based web framework built specifically for the <a src="https://lune-org.github.io/docs/" alt="Lune Runtime">Lune</a> runtime.
+        A high-performance, filesystem-based web framework built specifically for the <a href="https://lune-org.github.io/docs/" alt="Lune Runtime">Lune</a> runtime.
     </h3>
 </div> 
 
