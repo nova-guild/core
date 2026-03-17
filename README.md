@@ -159,13 +159,13 @@ end)
 
 | Total Requests | Requests/sec | p95 Latency | p90 Latency | Median Latency | Avg Latency | Success Rate | Failed Requests | Throughput |
 | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **687101** | **8592.95 req/s** | **29.76ms** | **23.84ms** | **11.22ms** | **24.63ms** | **99.00%** | **141** | **1.05 MB/s** |
+| **437310** | **5479.26 req/s** | **21.92ms** | **17.32ms** | **9.36ms** | **50.66ms** | **99.00%** | **311** | **0.67 MB/s** |
 
 #### 🖥️ Container Resource Usage (during benchmark)
 
 | Peak CPU | Avg CPU | Peak Memory | Avg Memory % |
 | :--- | :--- | :--- | :--- |
-| 126.51% | 43.58% | 82.54MiB | 0.24% |
+| 134.41% | 43.35% | 68.68MiB | 0.20% |
 
-_Last Benchmarked: Sun Mar 15 15:00:34 UTC 2026_
+_Last Benchmarked: Tue Mar 17 15:07:46 UTC 2026_
 <!-- BENCHMARK_END -->
