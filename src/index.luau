@@ -16,7 +16,6 @@ export type Next = types.Next
 export type Nova = types.Nova
 export type Request = types.Request
 export type RequestWith<T> = types.RequestWith<T>
-export type ResponseBody = types.ResponseBody
 export type ResponseOptions = types.ResponseOptions
 
 local Nova = {}
@@ -79,10 +78,10 @@ function Nova:listen(handler: () -> ())
                 end
             end
 
-            local success, result = pcall(rootPipeline, request)
+            local success, result: types.ResponsePayload = pcall(rootPipeline, request)
 
-            local status = 200
-
+            local status: number = 200
+            
             if not success then 
                 status = 500
             elseif result and result.config then
@@ -99,7 +98,7 @@ function Nova:listen(handler: () -> ())
 
             local finishReq = os.clock()
 
-            print(string.format("[%s] %s %s%s%s in %.3fms", request.method, request.path, color, status, reset, (finishReq - startReq) * 1000))
+            print(string.format("[%s] %s %s%d%s in %.3fms", request.method, request.path, color, status, reset, (finishReq - startReq) * 1000))
             
             local finalHeaders = {}
             if success then 

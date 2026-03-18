@@ -1,11 +1,20 @@
 --!optimize 2
+--!native
 
 local Types = require("../types")
 local Response = require("../utils/response")
 local serde = require("@lune/serde")
 
-local staticRoutes = {}
-local routeTreeRoot = {
+local staticRoutes: { [string]: any } = {}
+
+type RouteNode = {
+    children: { [string]: RouteNode },
+    dynamicChild: RouteNode?,
+    dynamicName: string?,
+    module: any?
+}
+
+local routeTreeRoot: RouteNode = {
     children = {},
     dynamicChild = nil,
     dynamicName = nil,
@@ -20,7 +29,7 @@ local function splitPath(path: string)
     return segments
 end
 
-local function createNode()
+local function createNode(): RouteNode
     return { children = {}, dynamicChild = nil, dynamicName = nil, module = nil }
 end
 
@@ -42,7 +51,7 @@ local function registerRoute(path: string, module: any)
                 currentNode.dynamicName = paramName
             end
             
-            currentNode = currentNode.dynamicChild
+            currentNode = currentNode.dynamicChild :: RouteNode
         else
             if not currentNode.children[segment] then
                 currentNode.children[segment] = createNode()
@@ -54,7 +63,7 @@ local function registerRoute(path: string, module: any)
     currentNode.module = module
 end
 
-local function routerDispatcher(request)
+local function routerDispatcher(request: Types.Request)
     local cleanPath = request.path
     if #cleanPath > 1 and cleanPath:sub(-1) == "/" then
         cleanPath = cleanPath:sub(1, -2)
@@ -67,7 +76,7 @@ local function routerDispatcher(request)
 
     if #rawBody > 0 then
         local success, result = pcall(function()
-            return serde.decode("json", rawBody)
+            return serde.decode("json", rawBody :: string)
         end)
         
         if success then
@@ -95,7 +104,8 @@ local function routerDispatcher(request)
         end
 
         if type(handler) == "function" then
-            return handler(req)
+            local fn = handler :: (Types.Request) -> any
+            return fn(req)
         else
             return Response.json({ error = "Method Not Allowed" }, { status = 405 })
         end
@@ -108,8 +118,8 @@ local function routerDispatcher(request)
         if currentNode.children[segment] then
             currentNode = currentNode.children[segment]
         elseif currentNode.dynamicChild then
-            req.params[currentNode.dynamicName] = segment
-            currentNode = currentNode.dynamicChild
+            req.params[currentNode.dynamicName :: string] = segment
+            currentNode = currentNode.dynamicChild :: RouteNode
         else
             return Response.json({ error = "Not Found" }, { status = 404 })
         end
@@ -130,7 +140,8 @@ local function routerDispatcher(request)
         return Response.json({ error = "Method Not Allowed" }, { status = 405 })
     end
 
-    return handler(req)
+    local fn = handler :: (Types.Request) -> any
+    return fn(req)
 end
 
 return { 
