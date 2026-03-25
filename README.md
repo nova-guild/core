@@ -28,10 +28,6 @@
 - [Route Definition](#route-definition)
 - [Routing Conventions](#routing-conventions)
 - [Middleware Chaining](#middleware-chaining)
-- [Performance Benchmarks](#performance-benchmarks)
-  - [Latest Performance (Auto-updated)](#latest-performance-auto-updated)
-    - [📊 HTTP / k6 Metrics](#-http--k6-metrics)
-    - [🖥️ Container Resource Usage (during benchmark)](#️-container-resource-usage-during-benchmark)
 
 ## Installation & Usage
 
@@ -149,23 +145,3 @@ end)
 ```
 
 *More info about middlewares soon.*
-
-## Performance Benchmarks
-
-<!-- BENCHMARK_START -->
-### Latest Performance (Auto-updated)
-
-#### 📊 HTTP / k6 Metrics
-
-| Total Requests | Requests/sec | p95 Latency | p90 Latency | Median Latency | Avg Latency | Success Rate | Failed Requests | Throughput |
-| :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- | :--- |
-| **471786** | **5928.33 req/s** | **20.59ms** | **16.11ms** | **8.47ms** | **39.90ms** | **99.00%** | **256** | **0.72 MB/s** |
-
-#### 🖥️ Container Resource Usage (during benchmark)
-
-| Peak CPU | Avg CPU | Peak Memory | Avg Memory % |
-| :--- | :--- | :--- | :--- |
-| 138.82% | 45.10% | 75.64MiB | 0.23% |
-
-_Last Benchmarked: Wed Mar 25 04:19:51 UTC 2026_
-<!-- BENCHMARK_END -->
