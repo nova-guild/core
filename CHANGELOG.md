@@ -1,5 +1,16 @@
 # Changelog
 
+## `v0.3.4` - March 25, 2026
+
+### Added
+- **Catch-All Routing (`[...slug]`)**: Introduced Next.js-inspired terminal wildcard routes. Wildcards instantly absorb all remaining URL segments in $O(1)$ time, providing extremely fast dynamic deep-routing.
+- **URL-Encoded Body Parsing**: The request dispatcher now supports `application/x-www-form-urlencoded` payloads out of the box, automatically parsing them into the `request.body` table.
+
+### Changed
+- **Zero-Allocation Route Parsing**: Completely rewrote the internal path parser. Replaced expensive regex/pattern matching (`:match`, `:gsub`) with raw C-level byte checking (`string.byte`) for dynamic route registration and trailing slash removal, drastically reducing memory allocations per request.
+- **Dynamic Parameter Memory Optimization**: Replaced standard array shifting (`table.insert(list, 1, val)`) with pre-allocated Luau arrays (`table.create`) and linear indexed assignments, massively speeding up dynamic route segment extraction.
+- **Dispatcher Refactoring (DRY)**: Consolidated the internal route execution logic. Static and dynamic routes now share a unified, centralized block for `HEAD` method fallbacks, handler validation, and `405 Method Not Allowed` responses.
+
 ## `v0.3.2` - March 15, 2026
 
 ###  Fixed
