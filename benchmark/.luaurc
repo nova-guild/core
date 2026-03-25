@@ -1,8 +1,0 @@
-{
-    "languageMode": "strict",
-    "aliases": {
-        "c": "",
-        "lune": "~/.lune/.typedefs/0.10.4/",
-        "pesde": "lune_packages/"
-    }
-}
