@@ -9,6 +9,10 @@ export type Nova = {
     listen: (self: Nova, handler: () -> ()) -> ()
 }
 
+-- Middleware
+export type Middleware = (req: Request | RequestWith<any>, next: Next) -> ResponsePayload?
+export type Handler = (req: Request | RequestWith<any>) -> any
+
 -- Request
 export type RequestWith<T> = {
     method: string,

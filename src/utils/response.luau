@@ -1,5 +1,3 @@
---!optimize 2
-
 local Types = require("../types")
 local serde = require("@lune/serde")
 

@@ -1,52 +1,62 @@
---!optimize 2
+local Types = require("../types")
 
-type Middleware = (req: any, next: () -> ()) -> any?
-type Handler = (req: any) -> any
-
-local function chain(middlewares: { Middleware }?, finalHandler: Handler)
+local function chain(middlewares: { Types.Middleware }?, finalHandler: Types.Handler)
     local queue = middlewares or {}
 
-    return function(req: any)
-        local index = 1
-        local finalResponse = nil
-
-        local function runNext()
-            local currentIndex = index
-            
-            local middleware = queue[currentIndex]
-            index += 1 
-
-            if middleware then
-                local nextCalled = false
-
-                local function nextFn()
-                    if nextCalled then
-                        error(`next() was called multiple times in middleware #{currentIndex}`)
-                    end
-                    nextCalled = true
-                    runNext()
-                end
-
-                local result = middleware(req, nextFn)
-                
-                if result ~= nil then
-                    finalResponse = result
-                elseif not nextCalled then
-                    error(`Middleware at index {currentIndex} failed to call next() or return a response!`)
-                end
-            else
-                local result = finalHandler(req)
-                
-                if result ~= nil then
-                    finalResponse = result
-                else
-                    error("Final route handler did not return a response!")
-                end
-            end
+    local currentPipeline = function(req: any)
+        local result = finalHandler(req)
+        if result == nil then
+            error("Final route handler did not return a response!")
         end
+        return result
+    end
 
-        runNext()
-        return finalResponse
+    for i = #queue, 1, -1 do
+        local middleware = queue[i]
+        local nextHandler = currentPipeline
+        
+        currentPipeline = function(req: any)
+            local nextCalled = false
+            local nextResponse = nil
+            
+            local function nextFn()
+                if nextCalled then
+                    error(`next() was called multiple times in middleware #{i}`)
+                end
+                nextCalled = true
+                nextResponse = nextHandler(req)
+            end
+            
+            local result = (middleware :: Types.Middleware)(req, nextFn)
+            
+            if result ~= nil then
+                return result
+            elseif not nextCalled then
+                error(`Middleware at index {i} failed to call next() or return a response!`)
+            end
+            
+            if nextResponse == nil then
+                error(`Middleware at index {i} did not return a response!`)
+            end
+
+            return nextResponse
+        end
+    end
+    
+    return function(rawReq: any)
+        local req = {
+            method = rawReq.method,
+            path = rawReq.path,
+            query = rawReq.query,
+            headers = rawReq.headers,
+            body = rawReq.body,
+            
+            locals = {},
+            
+            raw = rawReq 
+        }
+        
+        return currentPipeline(req)
     end
 end
 

@@ -1,6 +1,3 @@
---!optimize 2
---!native
-
 local net = require("@lune/net")
 local fs = require("@lune/fs")
 local serde = require("@lune/serde")
@@ -42,10 +39,27 @@ function Nova:listen(handler: () -> ())
     local mainDir = `@c/{mainDirName}`
         
     local faviconPath = `{process.cwd}/{mainDirName}/favicon.ico`
-    local faviconData: string? = nil
+    local isDev = process.env.LUNE_ENV ~= nil
+
+    local enableLogging = isDev
+
+    local INTERNAL_ERROR_RESPONSE = {
+        status = 500,
+        body = serde.encode("json", { error = "Internal Server Error" }),
+        headers = { ["Content-Type"] = "application/json" }
+    }
+    
+    local FAVICON_EMPTY_RESPONSE = { status = 204 }
+    local FAVICON_CACHED_RESPONSE: any = nil
 
     if fs.isFile(faviconPath) then
-        faviconData = fs.readFile(faviconPath)
+        FAVICON_CACHED_RESPONSE = {
+            status = 200,
+            body = fs.readFile(faviconPath),
+            headers = {["Content-Type"] = "image/x-icon",
+                ["Cache-Control"] = isDev and "no-cache" or "public, max-age=86400"
+            }
+        }
     end
 
     generateRoute(mainDir, "")
@@ -55,80 +69,52 @@ function Nova:listen(handler: () -> ())
     net.serve(self.port, {
         address = "http://0.0.0.0",
         handleRequest = function(request)
-            local startReq = os.clock()
-
             if request.path == "/favicon.ico" and request.method == "GET" then
-                local currentData = faviconData
-
-                if process.env.LUNE_ENV and fs.isFile(faviconPath) then
-                    currentData = fs.readFile(faviconPath)
-                end
-
-                if currentData then
+                if isDev and fs.isFile(faviconPath) then
                     return {
                         status = 200,
-                        body = currentData,
-                        headers = {
-                            ["Content-Type"] = "image/x-icon",
-                            ["Cache-Control"] = process.env.LUNE_ENV and "no-cache" or "public, max-age=86400"
+                        body = fs.readFile(faviconPath),
+                        headers = {["Content-Type"] = "image/x-icon",
+                            ["Cache-Control"] = "no-cache"
                         }
                     }
-                else
-                    return { status = 204 }
                 end
+                return FAVICON_CACHED_RESPONSE or FAVICON_EMPTY_RESPONSE :: net.ServeResponse
             end
 
             local success, result: types.ResponsePayload = pcall(rootPipeline, request)
 
-            local status: number = 200
-            
-            if not success then 
-                status = 500
-            elseif result and result.config then
-                status = result.config.status or 200
-            end
-
-            local color = "\27[31m"
-            if status >= 200 and status < 300 then
-                color = "\27[32m"
-            elseif status >= 300 and status < 400 then
-                color = "\27[34m"
-            end
-            local reset = "\27[0m"
-
-            local finishReq = os.clock()
-
-            print(string.format("[%s] %s %s%d%s in %.3fms", request.method, request.path, color, status, reset, (finishReq - startReq) * 1000))
-            
-            local finalHeaders = {}
-            if success then 
-                if result.config and result.config.headers then
-                    for key, value in pairs(result.config.headers) do
-                        finalHeaders[key] = value
-                    end
+            if not success then
+                if enableLogging then
+                    local errorMessage = debug.traceback(tostring(result), 2)
+                    print("\27[31m[Error]: " .. errorMessage .. "\27[0m")
                 end
-
-                return {
-                    status = status,
-                    body = result.body,
-                    headers = finalHeaders
-                }
-            else
-                local errorMessage = debug.traceback(tostring(result), 2)
-                print(`{color}[Error]: {errorMessage}{reset}`)
-
-                finalHeaders["Content-Type"] = "application/json"
-
-                return {
-                    status = 500,
-                    body = serde.encode("json", {
-                    error = "Internal Server Error", 
-                    }),
-                    headers = finalHeaders
-                }
+                return INTERNAL_ERROR_RESPONSE :: net.ServeResponse
             end
+
+            local status = 200
+            local headers = nil
+
+            if result and result.config then
+                status = result.config.status or 200
+                headers = result.config.headers
+            end
+
+            if enableLogging then
+                local color = "\27[31m"
+                if status >= 200 and status < 300 then color = "\27[32m"
+                elseif status >= 300 and status < 400 then color = "\27[34m" end
+                print(string.format("[%s] %s %s%d\27[0m", request.method, request.path, color, status))
+            end
+
+            return {
+                status = status,
+                body = result and result.body or nil,
+                headers = headers
+            }
         end
     })
+    
     local finish = os.clock() - start
     print(string.format("\nReady in %.4f ms\n", finish * 1000))
 

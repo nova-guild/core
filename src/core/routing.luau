@@ -1,6 +1,3 @@
---!optimize 2
---!native
-
 local Types = require("../types")
 local Response = require("../utils/response")
 local BodyParsers = require("./bodyParsers")
@@ -124,7 +121,7 @@ local function routerDispatcher(request: Types.Request)
     local req = {
         method = request.method,
         path = cleanPath,
-        body = {},
+        body = request.body or {},
         headers = request.headers,
         query = request.query or {},
         params = {}
