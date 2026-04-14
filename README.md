@@ -21,32 +21,30 @@
 
 - [Table of Contents](#table-of-contents)
 - [Installation \& Usage](#installation--usage)
-  - [Manual Installation](#manual-installation)
-    - [Usage](#usage)
-  - [Install a boilerplate](#install-a-boilerplate)
+  - [Installation](#installation)
+  - [Usage](#usage)
+    - [Manual Setup](#manual-setup)
 - [Core Features](#core-features)
-- [Route Definition](#route-definition)
 - [Routing Conventions](#routing-conventions)
 - [Middleware Chaining](#middleware-chaining)
 
 ## Installation & Usage
 
-### Manual Installation
+### Installation
 
-Manually install Nova via the Pesde package manager:
+Install Nova via the Pesde package manager:
 
 ```sh
 pesde add bizwiz3/nova
 pesde install
 ```
 
-#### Usage
+### Usage
 
-In your root project or `src/` directory, create your entry file.
+#### Manual Setup
 
-*Example:* `index.luau`
-
-*Paste the code below:*
+1. Create a `src/` directory in your project root.
+2. Create an entry file (e.g., `index.luau`) inside `src/` with the following code:
 
 ```lua
 local Nova = require("@path/to/nova")
@@ -56,13 +54,33 @@ local app = Nova.new(8080)
 app:listen() -- To run the server
 ```
 
-### Install a boilerplate
+3. Create an `app/` directory inside `src/`. This directory will house your routes.
+4. To create a route, add a `route.luau` file inside a directory within `app/`. The directory name becomes the base route.
 
-Installing a boilerplate for much easier setup
+For example, to create a route at `/`, create `src/app/route.luau`:
 
-```sh
-pesde x bizwiz/nova_setup
-pesde install
+```lua
+local Nova = require("@path/to/nova")
+
+local App = {}
+
+function App.Get()
+    return Nova.response.json({ msg = "Hello, Nova" })
+end
+
+return App
+```
+
+The module must export properties named after HTTP methods: `Get`, `Post`, `Put`, `Patch`, and `Delete`. You can define them as functions:
+
+```lua
+local App = {}
+
+App.Get = function()
+    return Nova.response.json({ msg = "Hello, Nova" })
+end
+
+return App
 ```
 
 ## Core Features
@@ -74,73 +92,33 @@ pesde install
 - **Environment Management:** Automatic `.env` loading and process injection.
 - **Integrated Logger:** Colored terminal output for request monitoring and debugging.
 
-## Route Definition
-
-Nova organizes routes by folder. To create a route at `/`, you must create an `app/` directory first in your root project or `src/` directory.
-
-Create a luau file inside the `app/` directory and name it `route.luau`.
-
-*Should look like this:*
-
-```sh
-project-dir/
-├── src/
-    ├── app/
-    |   └── route.luau
-    └── index.luau    
-```
-
-*Or like this*
-
-```sh
-project-dir/
-├── app/
-|    └── route.luau
-└── index.luau
-```
-
-*Paste the code below inside the `route.luau`:*
-
-```lua
-local Nova = require("@path/to/nova")
-
-local App = {}
-
-function App.Get()
-    return Nova.response({ msg = "Hello, Nova" })
-end
-
-return App
-```
-
-The Module name `App` itself does not matter, but it must have `Get`, `Post`, etc. as its public function.
-
 ## Routing Conventions
 
 Nova follows a predictable mapping from the filesystem to the URL path:
 
 | Path | Filesystem Map |
 | :--- | :--- |
-| **/** | `app/route.luau` |
-| **/users** | `app/users/route.luau` |
-| **/posts/:id** | `app/posts/[id]/route.luau` |
+| **/** | `src/app/route.luau` |
+| **/users** | `src/app/users/route.luau` |
+| **/posts/:id** | `src/app/posts/[id]/route.luau` |
 
 ## Middleware Chaining
 
 Utilize the `chain` helper to apply logic sequentially before a request reaches the final handler:
 
 ```lua
+-- route.luau
 local Nova = require("@path/to/nova")
 
 local function validate(req, next)
     if not req.headers["x-api-key"] then
-        return Nova.response({ error = "Forbidden" }, { status = 403 })
+        return Nova.response.json({ error = "Forbidden" }, { status = 403 })
     end
     next()
 end
 
 Route.Get = Nova.chain({ validate }, function(req)
-    return Nova.response({ data = "Authorized access" })
+    return Nova.response.json({ data = "Authorized access" })
 end)
 ```
 
