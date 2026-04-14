@@ -23,7 +23,7 @@ jobs:
           rm lune.zip
 
       - name: Run Lune CI
-        working-directory: ./ci
+        working-directory: .
         run: lune run test
   
   zune-test:
@@ -42,5 +42,5 @@ jobs:
           rm zune.zip
 
       - name: Run Zune CI
-        working-directory: ./ci
+        working-directory: .
         run: zune run test
