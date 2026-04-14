@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  ci-test:
+  lune-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -22,6 +22,17 @@ jobs:
           sudo mv lune /usr/local/bin/lune
           rm lune.zip
 
+      - name: Run Lune CI
+        working-directory: ./ci
+        run: lune run test
+  
+  zune-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
       - name: Install Zune
         run: |
           curl -f -L "https://github.com/Scythe-Technology/zune/releases/download/v0.5.5/zune-0.5.5-linux-x86_64.zip" -o zune.zip
@@ -29,18 +40,6 @@ jobs:
           chmod +x zune
           sudo mv zune /usr/local/bin/zune
           rm zune.zip
-
-      - name: Install Pesde
-        run: |
-          curl -f -L "https://github.com/pesde-pkg/pesde/releases/download/v0.7.2+registry.0.2.3/pesde-0.7.2-linux-x86_64.zip" -o pesde.zip
-          unzip -j pesde.zip
-          chmod +x pesde
-          sudo mv pesde /usr/local/bin/pesde
-          rm pesde.zip
-
-      - name: Run Lune CI
-        working-directory: ./ci
-        run: lune run test
 
       - name: Run Zune CI
         working-directory: ./ci
