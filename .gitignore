@@ -1,6 +1,7 @@
 
-#pesde
+# lock packages
 pesde.lock
+package-lock.json
 
 # env files
 .env
@@ -10,3 +11,8 @@ pesde.lock
 # packages
 lune_packages/
 luau_packages/
+node_modules/
+
+# vitepress
+docs/.vitepress/dist
+docs/.vitepress/cache
