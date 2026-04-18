@@ -1,4 +1,4 @@
-local process = require("@lute/process")
+local process = zune.process
 local serde = require("../src/libs/serde")
 local fs = require("../src/libs/fs")
 
@@ -15,7 +15,12 @@ decode.aliases.c = process.cwd() .. "/ci/"
 local encode = serde.encode("json", decode, true)
 fs.writeFile(luaurcPath, encode)
 
-local running = process.run( { "lute", "run", "tests/lute" }, { stdio = "inherit", cwd = "ci" })
+local running = process.run("zune", { "run", `src/index` }, {
+        stdin = "inherit",
+        stdout = "inherit",
+        stderr = "inherit",
+        cwd = "ci"
+    })
 
 if not running.ok then 
     print(running.stderr)

@@ -1,11 +1,11 @@
 # Zune Configuration
 
 [workspace]
-cwd = "ci"
+cwd = "."
  
 [workspace.scripts]
-start = "src/index"
-test = "tests/zune"
+start = ".zune/start"
+test = ".zune/test"
 
 [runtime.debug]
 detailed_error = true

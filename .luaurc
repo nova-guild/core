@@ -1,15 +1,15 @@
 {
-    "languageMode": "strict", 
-    "globals": [
-        "warn"
-    ], 
-    "aliases": {
-        "pesde": "lune_packages/", 
-        "std": "~/.lute/typedefs/0.1.0/std", 
-        "lune": "~/.lune/.typedefs/0.10.4/", 
-        "lint": "~/.lute/typedefs/0.1.0/lint", 
-        "nova": "/home/wiz/projects/nova/ci/src/", 
-        "c": "/home/wiz/projects/nova/ci/", 
-        "lute": "~/.lute/typedefs/0.1.0/lute"
-    }
+  "aliases": {
+    "c": "",
+    "lint": "~/.lute/typedefs/0.1.0/lint",
+    "lune": "~/.lune/.typedefs/0.10.4/",
+    "lute": "~/.lute/typedefs/0.1.0/lute",
+    "nova": "/home/wiz/projects/nova/ci/src/",
+    "pesde": "lune_packages/",
+    "std": "~/.lute/typedefs/0.1.0/std"
+  },
+  "globals": [
+    "warn"
+  ],
+  "languageMode": "strict"
 }
