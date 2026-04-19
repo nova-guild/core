@@ -1,6 +1,26 @@
-# Changelog
+# CHANGELOG
+
+## `v0.5.1` - April 19, 2026
+
+### Added
+
+- **GitHub Actions for Release Note:** Implemented GitHub Actions workflow for release automation.
+
+### Changed
+
+- Update `CHANGELOG` and `README` for Lute support
+
+## `v0.5.0` - April 19, 2026
+
+***Nova now runs on Lune, Zune and Lute through a runtime adapter layer.***
+
+### Added
+
+- **Lute Runtime Support:** Added `fs`, `net`, `process`, `serde`, and `task` adapters, bringing full Lute runtime support to Nova.
 
 ## `v0.4.0` - April 14, 2026
+
+***Nova now runs on both Lune and Zune through a runtime adapter layer.***
 
 ### Added
 
