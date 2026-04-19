@@ -1,4 +1,4 @@
-name = "bizwiz3/nova"
+name = "nova/core"
 version = "0.5.1"
 description = "A filesystem-based web framework for Luau runtimes, with out-of-the-box support for Lute, Lune and Zune."
 authors = ["BizWiz3 (https://github.com/BizWiz3)", "Leoj030 (https://github.com/Leoj030)"]
