@@ -1,10 +1,10 @@
 
 export type FsMetadata = {
-    kind: "file" | "dir" | "symlink",
+    kind: "file" | "dir",
     exists: boolean,
-    createdAt: DateTime,
-    modifiedAt: DateTime,
-    accessedAt: DateTime,
+    createdAt: number,
+    modifiedAt: number,
+    accessedAt: number,
     permissions: {
         readOnly: boolean
     }

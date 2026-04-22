@@ -3,7 +3,7 @@ local fs = require("../libs/fs")
 
 local function loadEnv()
     local envVars = {}
-    local success, content: string = pcall(fs.readFile, ".env" or ".env.local" or ".env.development")
+    local success, content = pcall(fs.readFile, ".env" or ".env.local" or ".env.development")
     
     if success then
         for line in content:gmatch("[^\r\n]+") do

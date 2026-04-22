@@ -20,7 +20,7 @@ export type ProcessChild = {
 export type ProcessAdapter = {
     cwd: string,
     env: { [string]: string? },
-    create: (exec: string, args: { string }?, opts: ProcessOptions?) -> ProcessChild,
+    create: (exec: string, args: { string }?, opts: ProcessOptions?) -> ProcessChild?,
 }
 
 return {}

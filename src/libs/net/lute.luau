@@ -1,21 +1,22 @@
-local http = zune.net.http
+local server = require("@lute/net/server")
+local client = require("@lute/net/client")
 local Types = require("./types")
 local normalizeHeader = require("../normalizeHeader")
 
-local ZuneNet = {} :: Types.NetAdapter
+local LuteNet = {} :: Types.NetAdapter
 
-function ZuneNet.serve(port, handlerOrConfig)
+function LuteNet.serve(port, handlerOrConfig)
     if not (typeof(handlerOrConfig) == "table") then return end
 
-    http.serve({
+    server.serve({
         port = port,
-        address = handlerOrConfig.address,
-        request = function(request)
+        hostname = handlerOrConfig.address,
+        handler = function(request)
             local res = handlerOrConfig.handleRequest(request :: any)
-
+            
             if typeof(res) == "string" then
                 return {
-                    status_code = 200,
+                    status = 200,
                     body = res
                 }
             end
@@ -32,17 +33,18 @@ function ZuneNet.serve(port, handlerOrConfig)
             end
 
             return {
-                status_code = res.status,
+                status = res.status,
                 headers = normalizedHeaders,
-                body = res.body
+                body = res.body :: string
             }
         end
     })
 end
 
-function ZuneNet.request(config: Types.FetchParams | string)
+function LuteNet.request(config)
+    
     if typeof(config) == "table" and config.url then
-        return http.request(config.url, {
+        return client.request(config.url, {
             headers = config.headers,
             method = config.method,
             body = config.body,
@@ -50,7 +52,7 @@ function ZuneNet.request(config: Types.FetchParams | string)
         }) :: any
     end
 
-    return http.request(config)
+    return client.request(config)
 end
 
-return ZuneNet
+return LuteNet

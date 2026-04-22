@@ -1,4 +1,4 @@
-local Nova = require("../../../../../src/index")
+local Nova = require("@nova/index")
 
 local UserId = {}
 

@@ -8,6 +8,8 @@ local function getAdapter(): Types.FsAdapter
         return require("@self/lune")
     elseif runtime == "zune" then
         return require("@self/zune")
+    elseif runtime == "luau" then
+        return require("@self/lute")
     else
         error(`Unsupported Runtime: "{runtime}"`)
     end

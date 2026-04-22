@@ -7,7 +7,7 @@ on:
     branches: [ "main" ]
 
 jobs:
-  lune-zune-test:
+  http-test:
     runs-on: ubuntu-latest
 
     steps:
@@ -30,6 +30,14 @@ jobs:
           sudo mv zune /usr/local/bin/zune
           rm zune.zip
 
+      - name: Install Lute
+        run: |
+          curl -f -L "https://github.com/luau-lang/lute/releases/download/v1.0.0/lute-linux-x86_64.zip" -o lute.zip
+          unzip -j lute.zip
+          chmod +x lute
+          sudo mv lute /usr/local/bin/lute
+          rm lute.zip
+
       - name: Run Lune CI
         working-directory: .
         run: lune run test
@@ -37,3 +45,7 @@ jobs:
       - name: Run Zune CI
         working-directory: .
         run: zune run test
+
+      - name: Run Lute CI
+        working-directory: .
+        run: lute run test

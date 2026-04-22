@@ -1,8 +1,12 @@
 {
   "aliases": {
-    "c": "",
+    "c": "/home/wiz/projects/nova/ci/",
+    "lint": "~/.lute/typedefs/0.1.0/lint",
     "lune": "~/.lune/.typedefs/0.10.4/",
-    "pesde": "lune_packages/"
+    "lute": "~/.lute/typedefs/0.1.0/lute",
+    "nova": "./ci/src/",
+    "pesde": "lune_packages/",
+    "std": "~/.lute/typedefs/0.1.0/std"
   },
   "globals": [
     "warn"

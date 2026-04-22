@@ -1,5 +1,4 @@
 local fs = zune.fs
-local luau = zune.luau
 local Types = require("./types")
 
 local ZuneFs = {} :: Types.FsAdapter
@@ -32,14 +31,6 @@ end
 
 function ZuneFs.metadata(path: string)
     return fs.metadata(path) :: any
-end
-
-function ZuneFs.loadModule(path: string)
-    local source = fs.readFileSync(path)
-    local bytecode = luau.compile(source)
-    local fn = luau.load(bytecode)
-    print("This is working 4")
-    return fn
 end
 
 return ZuneFs

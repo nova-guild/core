@@ -15,7 +15,6 @@ local function generateAlias()
 
     local encode = serde.encode("json", decode, true)
     decode.aliases.c = process.cwd
-    print(`[debug] writing @c = "{decode.aliases.c}"`)
     fs.writeFile(luaurcPath, encode)
 end
 

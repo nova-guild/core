@@ -1,6 +1,6 @@
-local Nova = require("../../../../src/index")
-local fs = require("../../../../src/libs/fs")
-local process = require("../../../../src/libs/process")
+local Nova = require("@nova/index")
+local fs = require("@nova/libs/fs")
+local process = require("@nova/libs/process")
 
 local SimpleWeb = {}
 
