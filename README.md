@@ -1,6 +1,6 @@
 <div align="center">
     <div>
-        <img src="NOVA.svg" alt="Nova logo">
+        <img height="150" src="./docs/nova.png" alt="Nova logo">
     </div>
     <br>
     <a href="https://pesde.dev/packages/bizwiz3/nova">
@@ -13,7 +13,7 @@
         <img src="https://github.com/BizWiz3/nova/actions/workflows/ci.yml/badge.svg">
     </a>
     <h3>
-        A filesystem-based web framework for Luau runtimes, with out-of-the-box support for <a href="https://lune-org.github.io/docs/" alt="Lune Runtime">Lune</a> and <a href="https://zune.sh/" alt="Lune Runtime">Zune</a>.
+        A filesystem-based web framework for Luau runtimes, with out-of-the-box support for <a href="https://lute.luau.org/" alt="Lute Runtime">Lute</a>, <a href="https://lune-org.github.io/docs/" alt="Lune Runtime">Lune</a> and <a href="https://zune.sh/" alt="Zune Runtime">Zune</a>.
     </h3>
 </div> 
 
