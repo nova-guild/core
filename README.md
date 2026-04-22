@@ -1,6 +1,6 @@
 <div align="center">
     <div>
-        <img src="NOVA.svg" alt="Nova logo">
+        <img height="150" src="./docs/nova.png" alt="Nova logo">
     </div>
     <br>
     <a href="https://pesde.dev/packages/bizwiz3/nova">
