@@ -1,7 +1,6 @@
 
 # lock packages
 pesde.lock
-package-lock.json
 
 # env files
 .env
