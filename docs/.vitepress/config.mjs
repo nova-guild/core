@@ -3,10 +3,13 @@ import { defineConfig } from 'vitepress'
 // https://vitepress.dev/reference/site-config
 export default defineConfig({
   title: "Nova",
-  description: "A filesystem-based web framework for Luau runtimes, with out-of-the-box support for Lune and Zune.",
+  description: "A filesystem-based web framework for Luau runtimes, with out-of-the-box support for Lute, Lune and Zune.",
   head: [['link', { rel: 'icon', href: '/core/favicon.ico' }]],
   base: "/core/",
   themeConfig: {
+    search: {
+      provider: 'local'
+    },
     nav: [
       { text: 'Home', link: '/' },
       { text: 'Blog', link: '/blog/changelog' }

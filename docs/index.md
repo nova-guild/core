@@ -18,11 +18,11 @@ hero:
       link: guides/project-structure
 
 features:
-  - title: High Performance
-    details: Built to run incredibly fast
-  - title: Filesystem-Based Routing
-    details: Utilizing File System to make routing easier
-  - title: Runtime-Agnostic
-    details: Supported multiple runtimes
+  - title: Middleware Support
+    details: Easily chain logic together (like authentication or logging) before your main code runs
+  - title: Filesystem Routing
+    details: No manual route registration. Your folders are your paths
+  - title: Runtime Agnostic
+    details: Whether you prefer Lune, Zune, or Lute, Nova is built to work across the different Luau runtimes seamlessly
 ---
 
