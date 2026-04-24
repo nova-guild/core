@@ -1,5 +1,17 @@
 # Changelog
 
+## `v0.5.2` - April 24, 2026
+
+### Changed
+
+- Improve loadEnv function to handle multiple environment files
+- Streamline runtime check and enhance file system operations
+- Update project name and version in pesde.toml
+  
+### Removed
+
+- Temporarily remove obsolete CI configuration and related files
+
 ## `v0.5.1` - April 19, 2026
 
 ### Added
@@ -19,6 +31,8 @@
 - **Lute Runtime Support:** Added `fs`, `net`, `process`, `serde`, and `task` adapters, bringing full Lute runtime support to Nova.
 
 ## `v0.4.0` - April 14, 2026
+
+***Nova now runs on both Lune and Zune through a runtime adapter layer.***
 
 ### Added
 
