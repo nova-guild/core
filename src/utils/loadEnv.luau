@@ -2,10 +2,18 @@ local process = require("../libs/process")
 local fs = require("../libs/fs")
 
 local function loadEnv()
-    local envVars = {}
-    local success, content = pcall(fs.readFile, ".env" or ".env.local" or ".env.development")
-    
-    if success then
+    local envVars: { [string]: string } = {}
+    local content: string?
+
+    for _, filename in { ".env", ".env.local", ".env.development" } do
+        local success, result = pcall(fs.readFile, filename)
+        if success then
+            content = result
+            break
+        end
+    end
+
+    if content then
         for line in content:gmatch("[^\r\n]+") do
             if not line:match("^%s*#") and line:match("=") then
                 local key, value = line:match("^%s*([^=]+)%s*=%s*(.-)%s*$")
@@ -17,6 +25,7 @@ local function loadEnv()
             end
         end
     end
+
     return envVars
 end
 
