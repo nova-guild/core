@@ -22,15 +22,17 @@ jobs:
         id: changelog
         run: |
           TAG="${GITHUB_REF_NAME}"
-          echo "Looking for tag: $TAG"
-          echo "--- Changelog content ---"
-          cat docs/CHANGELOG.md | head -20
-          echo "--- AWK output ---"
-          BODY=$(awk "/^## \`${TAG}\`/,/^## \`v[0-9]/" docs/blog/changelog.md \
-            | head -n -1 \
-            | tail -n +2)
+          CHANGELOG="docs//blog/changelog.md"
+
+          BODY=$(awk "
+            /^## \`${TAG}\`/ { found=1; next }
+            found && /^## \`v[0-9]+\.[0-9]+\.[0-9]+\`/ { exit }
+            found { print }
+          " "$CHANGELOG")
+
           echo "--- Extracted body ---"
           echo "$BODY"
+
           echo "body<<EOF" >> $GITHUB_OUTPUT
           echo "$BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
