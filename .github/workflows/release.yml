@@ -22,7 +22,7 @@ jobs:
         id: changelog
         run: |
           TAG="${GITHUB_REF_NAME}"
-          CHANGELOG="docs//blog/changelog.md"
+          CHANGELOG="docs/blog/changelog.md"
 
           BODY=$(awk "
             /^## \`${TAG}\`/ { found=1; next }
