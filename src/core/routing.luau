@@ -2,8 +2,6 @@ local Types = require("../types")
 local Response = require("../utils/response")
 local BodyParsers = require("./bodyParsers")
 
-local staticRoutes: { [string]: any } = {}
-
 type RouteNode = {
     children: { [string]: RouteNode },
     dynamicChild: RouteNode?,
@@ -13,11 +11,18 @@ type RouteNode = {
     module: any?
 }
 
+local staticRoutes: { [string]: any } = {}
+
 local routeTreeRoot: RouteNode = {
     children = {},
     dynamicChild = nil,
     dynamicName = nil,
     module = nil
+}
+
+local METHOD_MAP = {
+    GET = "Get", POST = "Post", PUT = "Put", 
+    DELETE = "Delete", PATCH = "Patch", HEAD = "Head"
 }
 
 local function splitPath(path: string): {string}
@@ -70,41 +75,61 @@ local function registerRoute(path: string, module: any)
     currentNode.module = module
 end
 
-local function matchRoute(node: RouteNode, segments: {string}, index: number, params: {[string]: any}): RouteNode?
-    if index > #segments then
-        return node.module and node or nil
-    end
+local function matchRouteFrom(node: RouteNode, segments: {string}, index: number, params: {[string]: any}): RouteNode?
+    while index <= #segments do
+        local segment = segments[index]
 
-    local segment = segments[index]
+        if node.children[segment] then
+            node = node.children[segment]
+        elseif node.dynamicChild then
+            if node.wildcardChild and node.wildcardChild.module then
+                local dynamicParams = table.clone(params)
+                dynamicParams[node.dynamicName :: string] = segment
 
-    if node.children[segment] then
-        local result = matchRoute(node.children[segment], segments, index + 1, params)
-        if result then return result end
-    end
+                local result = matchRouteFrom(node.dynamicChild :: RouteNode, segments, index + 1, dynamicParams)
+                if result then
+                    for k, v in dynamicParams do
+                        params[k] = v
+                    end
+                    return result
+                end
 
-    if node.dynamicChild then
-        local result = matchRoute(node.dynamicChild, segments, index + 1, params)
-        if result then
+                local remainingCount = #segments - index + 1
+                local remaining = table.create(remainingCount)
+                for i = index, #segments do
+                    remaining[i - index + 1] = segments[i]
+                end
+                params[node.wildcardName :: string] = remaining
+                return node.wildcardChild
+            end
+
             params[node.dynamicName :: string] = segment
-            return result
+            node = node.dynamicChild :: RouteNode
+        elseif node.wildcardChild and node.wildcardChild.module then
+            local remainingCount = #segments - index + 1
+            local remaining = table.create(remainingCount)
+            for i = index, #segments do
+                remaining[i - index + 1] = segments[i]
+            end
+            params[node.wildcardName :: string] = remaining
+            return node.wildcardChild
+        else
+            return nil
         end
+
+        index += 1
     end
 
     if node.wildcardChild and node.wildcardChild.module then
-        local remainingCount = #segments - index + 1
-        local remaining = table.create(remainingCount) 
-        
-        local c = 1
-        for i = index, #segments do
-            remaining[c] = segments[i]
-            c += 1
-        end
-        
-        params[node.wildcardName :: string] = remaining
+        params[node.wildcardName :: string] = {}
         return node.wildcardChild
     end
 
-    return nil
+    return node.module and node or nil
+end
+
+local function matchRoute(rootNode: RouteNode, segments: {string}, params: {[string]: any}): RouteNode?
+    return matchRouteFrom(rootNode, segments, 1, params)
 end
 
 local function routerDispatcher(request: Types.Request)
@@ -115,8 +140,7 @@ local function routerDispatcher(request: Types.Request)
         cleanPath = string.sub(cleanPath, 1, pathLen - 1)
     end
 
-    local method = request.method
-    method = string.upper(string.sub(method, 1, 1)) .. string.lower(string.sub(method, 2))
+    local method = METHOD_MAP[request.method]
 
     local req = {
         method = request.method,
@@ -148,7 +172,7 @@ local function routerDispatcher(request: Types.Request)
     
     if not matchedModule then
         local segments = splitPath(cleanPath)
-        local matchedNode = matchRoute(routeTreeRoot, segments, 1, req.params)
+        local matchedNode = matchRoute(routeTreeRoot, segments, req.params)
 
         if not matchedNode or not matchedNode.module then
             return Response.json({ error = "Not Found" }, { status = 404 })
