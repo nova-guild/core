@@ -3,9 +3,16 @@ local Types = require("./types")
 
 local LuteFs = {} :: Types.FsAdapter
 
+local stat = fs.stat
+local open = fs.open
+local read = fs.read
+local close = fs.close
+local write = fs.write
+local listdir = fs.listdir
+
 function LuteFs.isFile(path: string)
     local ok, err = pcall(function()  
-        return fs.stat(path).type == "file"
+        return stat(path).type == "file"
     end)
 
     return if ok then err else ok
@@ -13,25 +20,25 @@ end
 
 function LuteFs.isDir(path: string)
     local ok, err = pcall(function()  
-        return fs.stat(path).type == "dir"
+        return stat(path).type == "dir"
     end)
 
     return if ok then err else ok
 end
 
 function LuteFs.readFile(path: string): string
-    local fileHandle = fs.open(path)
-    local fileContent = fs.read(fileHandle)
-    fs.close(fileHandle)
+    local fileHandle = open(path)
+    local fileContent = read(fileHandle)
+    close(fileHandle)
 
     return fileContent
 end
 
 function LuteFs.writeFile(path: string, contents: string)
     local ok, err = pcall(function()
-        local handle = fs.open(path, "w")
-        fs.write(handle, contents)
-        fs.close(handle)
+        local handle = open(path, "w")
+        write(handle, contents)
+        close(handle)
     end)
     if not ok then
         error(`Failed to write file '{path}': {err}`)
@@ -39,7 +46,7 @@ function LuteFs.writeFile(path: string, contents: string)
 end
 
 function LuteFs.readDir(path: string)
-    local dirEntry: {fs.DirectoryEntry} = fs.listdir(path)
+    local dirEntry: {fs.DirectoryEntry} = listdir(path)
     local dirList = {}
 
     for i = 1, table.maxn(dirEntry) do
@@ -50,18 +57,18 @@ function LuteFs.readDir(path: string)
 end
 
 function LuteFs.metadata(path: string)
-    local ok, stat = pcall(fs.stat, path)
+    local ok, fileStat = pcall(stat, path)
     if not ok then
         error("Path not found: " .. path)
     end
     return {
-        kind = stat.type :: any,
+        kind = fileStat.type :: any,
         exists = true,
-        createdAt = stat.created:toSeconds(),
-        modifiedAt = stat.modified:toSeconds(),
-        accessedAt = stat.accessed:toSeconds(),
+        createdAt = fileStat.created:toSeconds(),
+        modifiedAt = fileStat.modified:toSeconds(),
+        accessedAt = fileStat.accessed:toSeconds(),
         permissions = {
-            readOnly = stat.permissions.readonly,
+            readOnly = fileStat.permissions.readonly,
         },
     }
 end

@@ -3,7 +3,7 @@ local fs = require("./libs/fs")
 local serde = require("./libs/serde")
 local process = require("./libs/process")
 local types = require("./types")
-local Routing = require("./core/routing")
+local routing = require("./core/routing")
 local loadEnv = require("./utils/loadEnv")
 local findMainDir = require("./utils/findMainDir")
 local generateRoute = require("./core/generateRoute")
@@ -14,6 +14,14 @@ export type Nova = types.Nova
 export type Request = types.Request
 export type RequestWith<T> = types.RequestWith<T>
 export type ResponseOptions = types.ResponseOptions
+
+local serve = net.serve
+local isFile = fs.isFile
+local readFile = fs.readFile
+local encode = serde.encode
+local env = process.env
+local cwd = process.cwd
+local routerDispatcher = routing.routerDispatcher
 
 local Nova = {}
 Nova.__index = Nova
@@ -27,6 +35,7 @@ function Nova.new(port: number, middlewares: { (req: types.Request, next: types.
     self.middlewares = middlewares
 
     loadEnv()
+    generateAlias()
 
     return self :: Nova
 end
@@ -37,42 +46,40 @@ function Nova:listen(handler: () -> ())
     local mainDirName = findMainDir()
     local mainDir = `@c/{mainDirName}`
         
-    local faviconPath = `{process.cwd}/{mainDirName}/favicon.ico`
-    local enableLogging = process.env.LUNE_ENV ~= nil
+    local faviconPath = `{cwd}/{mainDirName}/favicon.ico`
+    local enableLogging = env.LUNE_ENV ~= nil
 
     local INTERNAL_ERROR_RESPONSE = {
         status = 500,
-        body = serde.encode("json", { error = "Internal Server Error" }),
+        body = encode("json", { error = "Internal Server Error" }),
         headers = { ["Content-Type"] = "application/json" }
     }
     
     local FAVICON_EMPTY_RESPONSE = { status = 204 }
     local FAVICON_CACHED_RESPONSE: any = nil
 
-    if fs.isFile(faviconPath) then
+    if isFile(faviconPath) then
         FAVICON_CACHED_RESPONSE = {
             status = 200,
-            body = fs.readFile(faviconPath),
+            body = readFile(faviconPath),
             headers = {["Content-Type"] = "image/x-icon",
                 ["Cache-Control"] = enableLogging and "no-cache" or "public, max-age=86400"
             }
         }
     end
 
-    generateAlias()
-
     generateRoute(mainDir, "")
 
-    local rootPipeline = Nova.chain(self.middlewares, Routing.routerDispatcher)
+    local rootPipeline = Nova.chain(self.middlewares, routerDispatcher)
 
-    net.serve(self.port, {
+    serve(self.port, {
         address = "0.0.0.0",
         handleRequest = function(request)
             if request.path == "/favicon.ico" and request.method == "GET" then
-                if enableLogging and fs.isFile(faviconPath) then
+                if enableLogging and isFile(faviconPath) then
                     return {
                         status = 200,
-                        body = fs.readFile(faviconPath),
+                        body = readFile(faviconPath),
                         headers = {["Content-Type"] = "image/x-icon",
                             ["Cache-Control"] = "no-cache"
                         }

@@ -4,10 +4,13 @@ local normalizeHeader = require("../normalizeHeader")
 
 local ZuneNet = {} :: Types.NetAdapter
 
+local serve = http.serve
+local req = http.request
+
 function ZuneNet.serve(port, handlerOrConfig)
     if not (typeof(handlerOrConfig) == "table") then return end
 
-    http.serve({
+    serve({
         port = port,
         address = handlerOrConfig.address,
         request = function(request)
@@ -40,9 +43,9 @@ function ZuneNet.serve(port, handlerOrConfig)
     })
 end
 
-function ZuneNet.request(config: Types.FetchParams | string)
+function ZuneNet.request(config: Types.FetchParams| string)
     if typeof(config) == "table" and config.url then
-        return http.request(config.url, {
+        return req(config.url, {
             headers = config.headers,
             method = config.method,
             body = config.body,
@@ -50,7 +53,7 @@ function ZuneNet.request(config: Types.FetchParams | string)
         }) :: any
     end
 
-    return http.request(config)
+    return (req :: (string) -> Types.FetchResponse)(config)
 end
 
 return ZuneNet

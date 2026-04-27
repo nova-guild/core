@@ -4,15 +4,20 @@ local Types = require("./types")
 
 local LuneProcess = {} :: Types.ProcessAdapter
 
-LuneProcess.cwd = process.cwd
-LuneProcess.env = process.env
+local cwd = process.cwd
+local env = process.env
+local create = process.create
+local exit = process.exit
+
+LuneProcess.cwd = cwd
+LuneProcess.env = env
 
 function LuneProcess.create(exec, args, opts)
-    return process.create(exec, args, opts) :: any
+    return create(exec, args, opts) :: any
 end
 
 function LuneProcess.exit(code)
-    process.exit(code)
+    exit(code)
 end
 
 return LuneProcess

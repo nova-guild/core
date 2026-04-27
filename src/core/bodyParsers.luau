@@ -2,6 +2,8 @@ local serde = require("../libs/serde")
 
 type BodyParsers = { [string]: (raw: string) -> string | {any}}
 
+local decode = serde.decode
+
 local BodyParsers: BodyParsers = {}
 
 BodyParsers["text/plain"] = function(raw: string) 
@@ -10,7 +12,7 @@ end
 
 BodyParsers["application/json"] = function(raw: string)
     local success, result = pcall(function()
-        return serde.decode("json", raw)
+        return decode("json", raw)
     end)
     if not success then
         warn("Failed to decode JSON body")

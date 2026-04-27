@@ -6,6 +6,8 @@ local serde = require("../libs/serde")
 ]]
 local Response = {} :: Types.Response
 
+local encode = serde.encode
+
 local function generateResponse(body: string, config: Types.ResponseOptions) 
     return {
         body = body, 
@@ -26,7 +28,7 @@ function Response.send(body: string, config: Types.ResponseOptions?)
 end
 
 function Response.json(body: {any}, config: Types.ResponseOptions?)
-    local encodedBody = serde.encode("json", body)
+    local encodedBody = encode("json", body)
 
     return generateResponse(encodedBody, {
         status = config and config.status or 200,

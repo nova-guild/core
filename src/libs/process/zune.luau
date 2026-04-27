@@ -4,15 +4,20 @@ local Types = require("./types")
 
 local ZuneProcess = {} :: Types.ProcessAdapter
 
-ZuneProcess.cwd = process.cwd() .. "/"
-ZuneProcess.env = process.env :: { [string]: string? }
+local cwd = process.cwd
+local env = process.env
+local create = process.create
+local exit = process.exit
+
+ZuneProcess.cwd = cwd() .. "/"
+ZuneProcess.env = env :: { [string]: string? }
 
 function ZuneProcess.create(exec, args, opts)
-    return process.create(exec, args, opts)
+    return create(exec, args, opts)
 end
 
 function ZuneProcess.exit(code)
-    process.exit(code)
+    exit(code)
 end
 
 return ZuneProcess

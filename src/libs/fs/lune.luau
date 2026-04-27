@@ -3,28 +3,35 @@ local Types = require("./types")
 
 local LuneFs = {} :: Types.FsAdapter
 
+local isFile = fs.isFile
+local readFile = fs.readFile
+local writeFile = fs.writeFile
+local isDir = fs.isDir
+local readDir = fs.readDir
+local metadata = fs.metadata
+
 function LuneFs.isFile(path: string)
-    return fs.isFile(path)
+    return isFile(path)
 end
 
 function LuneFs.readFile(path: string)
-    return fs.readFile(path)
+    return readFile(path)
 end
 
 function LuneFs.writeFile(path: string, contents: string)
-    return fs.writeFile(path, contents)
+    return writeFile(path, contents)
 end
 
 function LuneFs.isDir(path: string)
-    return fs.isDir(path)
+    return isDir(path)
 end
 
 function LuneFs.readDir(path: string)
-    return fs.readDir(path)
+    return readDir(path)
 end
 
 function LuneFs.metadata(path: string)
-    return fs.metadata(path) :: any
+    return metadata(path) :: any
 end
 
 return LuneFs

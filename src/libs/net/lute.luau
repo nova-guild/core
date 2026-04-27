@@ -5,10 +5,13 @@ local normalizeHeader = require("../normalizeHeader")
 
 local LuteNet = {} :: Types.NetAdapter
 
+local req = client.request
+local serve = server.serve
+
 function LuteNet.serve(port, handlerOrConfig)
     if not (typeof(handlerOrConfig) == "table") then return end
 
-    server.serve({
+    serve({
         port = port,
         hostname = handlerOrConfig.address,
         handler = function(request)
@@ -44,7 +47,7 @@ end
 function LuteNet.request(config)
     
     if typeof(config) == "table" and config.url then
-        return client.request(config.url, {
+        return req(config.url, {
             headers = config.headers,
             method = config.method,
             body = config.body,
@@ -52,7 +55,7 @@ function LuteNet.request(config)
         }) :: any
     end
 
-    return client.request(config)
+    return req(config) :: any
 end
 
 return LuteNet

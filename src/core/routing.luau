@@ -11,6 +11,8 @@ type RouteNode = {
     module: any?
 }
 
+local json = Response.json
+
 local staticRoutes: { [string]: any } = {}
 
 local routeTreeRoot: RouteNode = {
@@ -154,7 +156,7 @@ local function routerDispatcher(request: Types.Request)
     local rawBody = request.body or ""
     if #rawBody > 0 then
         if not request.headers then 
-            return Response.json({ error = "Conflict" }, { status = 409 })
+            return json({ error = "Conflict" }, { status = 409 })
         end
 
         local rawType = request.headers["content-type"] or request.headers["Content-Type"] or ""
@@ -162,7 +164,7 @@ local function routerDispatcher(request: Types.Request)
         local parser = BodyParsers[cleanType]
 
         if not parser then 
-            return Response.json({ error = "Unsupported Media Type" }, { status = 415 })
+            return json({ error = "Unsupported Media Type" }, { status = 415 })
         end
 
         req.body = parser(rawBody :: string) :: {any}
@@ -175,7 +177,7 @@ local function routerDispatcher(request: Types.Request)
         local matchedNode = matchRoute(routeTreeRoot, segments, req.params)
 
         if not matchedNode or not matchedNode.module then
-            return Response.json({ error = "Not Found" }, { status = 404 })
+            return json({ error = "Not Found" }, { status = 404 })
         end
         
         matchedModule = matchedNode.module
@@ -190,7 +192,7 @@ local function routerDispatcher(request: Types.Request)
                 error("The request method is Head but neither function Head nor Get are found")
             end
         else
-            return Response.json({ error = "Method Not Allowed" }, { status = 405 })
+            return json({ error = "Method Not Allowed" }, { status = 405 })
         end
     end
 
