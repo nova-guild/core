@@ -11,4 +11,8 @@ function LuneProcess.create(exec, args, opts)
     return process.create(exec, args, opts) :: any
 end
 
+function LuneProcess.exit(code)
+    process.exit(code)
+end
+
 return LuneProcess

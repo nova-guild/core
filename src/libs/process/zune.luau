@@ -11,4 +11,8 @@ function ZuneProcess.create(exec, args, opts)
     return process.create(exec, args, opts)
 end
 
+function ZuneProcess.exit(code)
+    process.exit(code)
+end
+
 return ZuneProcess

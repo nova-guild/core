@@ -4,12 +4,11 @@
         "warn"
     ], 
     "aliases": {
-        "pesde": "lune_packages/", 
         "std": "~/.lute/typedefs/1.0.0/std", 
-        "c": "/home/wiz/projects/nova-projects/core/ci/", 
         "lint": "~/.lute/typedefs/1.0.0/lint", 
-        "nova": "./ci/src/", 
         "lune": "~/.lune/.typedefs/0.10.4/", 
-        "lute": "~/.lute/typedefs/1.0.0/lute"
+        "lute": "~/.lute/typedefs/1.0.0/lute",
+        "src": "./src/",
+        "test-runner": "./tests/runner"
     }
 }

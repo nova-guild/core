@@ -11,14 +11,18 @@ function LuteProcess.create(exec, args, opts: ProcessOptions?): ProcessChild?
         return nil
     end
 
-    local query = table.concat(args, " ")
-    query = `{exec} {query}`
+    -- local query = table.concat(args, " ")
+    -- query = `{exec} {query}`
     
-    return process.run({"sh", 
-        "-c", 
-        `{query} &`
-    }, opts) :: any
-    --return process.run({ exec, args[1], args[2] }, opts) :: any
+    -- return process.run({"sh", 
+    --     "-c", 
+    --     `{query} &`
+    -- }, opts) :: any
+    return process.run({ exec, args[1], args[2] }, opts :: any) :: any
+end
+
+function LuteProcess.exit(code)
+    process.exit(code)
 end
 
 return LuteProcess

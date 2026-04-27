@@ -21,6 +21,7 @@ export type ProcessAdapter = {
     cwd: string,
     env: { [string]: string? },
     create: (exec: string, args: { string }?, opts: ProcessOptions?) -> ProcessChild?,
+    exit: (number) -> ()
 }
 
 return {}

@@ -16,8 +16,7 @@ export type FsAdapter = {
     writeFile: (path: string, contents: buffer | string) -> (),
     isDir: (path: string) -> boolean,
     readDir: (path: string) -> {string},
-    metadata: (path: string) -> FsMetadata,
-    loadModule: (path: string) -> any
+    metadata: (path: string) -> FsMetadata
 }
 
 return {}
