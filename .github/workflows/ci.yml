@@ -1,0 +1,51 @@
+name: CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  http-test:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Install Lune
+        run: |
+          curl -f -L "https://github.com/lune-org/lune/releases/download/v0.10.4/lune-0.10.4-linux-x86_64.zip" -o lune.zip
+          unzip -j lune.zip
+          chmod +x lune
+          sudo mv lune /usr/local/bin/lune
+          rm lune.zip
+      
+      - name: Install Zune
+        run: |
+          curl -f -L "https://github.com/Scythe-Technology/zune/releases/download/v0.5.5/zune-0.5.5-linux-x86_64.zip" -o zune.zip
+          unzip -j zune.zip
+          chmod +x zune
+          sudo mv zune /usr/local/bin/zune
+          rm zune.zip
+
+      - name: Install Lute
+        run: |
+          curl -f -L "https://github.com/luau-lang/lute/releases/download/v1.0.0/lute-linux-x86_64.zip" -o lute.zip
+          unzip -j lute.zip
+          chmod +x lute
+          sudo mv lute /usr/local/bin/lute
+          rm lute.zip
+
+      - name: Run Lune Test
+        working-directory: .
+        run: lune run test
+
+      - name: Run Zune Test
+        working-directory: .
+        run: zune run test
+
+      - name: Run Lute Test
+        working-directory: .
+        run: lute run test
