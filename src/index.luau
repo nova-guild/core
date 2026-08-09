@@ -1,8 +1,3 @@
-local net = require("./adapter/net")
-local fs = require("./adapter/fs")
-local serde = require("./adapter/serde")
-local process = require("./adapter/process")
-local Types = require("./types")
 local routeDispatcher = require("./core/Routing/Dispatcher")
 local generateRoute = require("./core/Routing/Generator")
 local loadEnv = require("./utils/LoadEnv")
@@ -11,30 +6,38 @@ local generateAlias = require("./utils/GenerateAlias")
 local attrRegistryGenerator = require("./core/Attribute/RegistryGenerator")
 local RouteLogger = require("./utils/Logger")
 local Chain = require("./utils/Chain")
+local common = require("@mayari.common")
+local adpt = require("@mayari.adpt")
 
-export type Next = Types.Next
-export type Nova = Types.Nova
-export type Middleware = Types.Middleware
-export type Handler = Types.Handler
-export type Request = Types.Request
-export type RequestWith<T> = Types.RequestWith<T>
-export type ResponseOptions = Types.ResponseOptions
-export type ResponsePayload = Types.ResponsePayload
-export type Response = Types.Response
+export type Next = common.Next
+export type Mayari = common.Mayari
+export type Middleware = common.Middleware
+export type Handler = common.Handler
+export type Request = common.Request
+export type RequestWith<T> = common.RequestWith<T>
+export type ResponseOptions = common.ResponseOptions
+export type ResponsePayload = common.ResponsePayload
+export type Response = common.Response
 
 -- Validator Schema
-export type BodyField = Types.BodyField
-export type StringField = Types.StringField
-export type ValidatorSchema = Types.ValidatorSchema
+export type BodyField = common.BodyField
+export type StringField = common.StringField
+export type ValidatorSchema = common.ValidatorSchema
+
+local net = adpt.net
+local fs = adpt.fs
+local json = adpt.json
+local process = adpt.process
 
 local serve = net.serve
 local isFile = fs.isFile
 local readFile = fs.readFile
-local encode = serde.encode
 local cwd = process.cwd
 
-local Nova = {}
-Nova.__index = Nova
+local Mayari = {}
+Mayari.__index = Mayari
+
+type MayariPrivate = typeof(Mayari)
 
 local function statusLog(status: number, req)
     local statusColor = "\27[31m"
@@ -51,15 +54,15 @@ local function statusLog(status: number, req)
     end
 end
 
-local function devMiddleware(req: Types.Request, next: Types.Next)
+local function devMiddleware(req: common.Request, next: common.Next)
     local res = next()
     local status = res.config.status or 200
 
     statusLog(status, req)
 end
 
-function Nova.new(port: number, middlewares: { (req: Types.Request, next: Types.Next) -> () }?)
-    local self = setmetatable({}, Nova)
+function Mayari.new(port: number, middlewares: { Middleware }?)
+    local self = setmetatable({} :: MayariPrivate, Mayari)
     self.port = port
     self.middlewares = middlewares
     self.dev = table.find(process.args, "dev") ~= nil
@@ -67,10 +70,10 @@ function Nova.new(port: number, middlewares: { (req: Types.Request, next: Types.
     loadEnv()
     generateAlias()
 
-    return self :: Nova
+    return self :: Mayari
 end
 
-function Nova:listen(handler: () -> ())
+function Mayari.listen(self: MayariPrivate, handler: () -> ())
     local start = os.clock()
 
     local mainDirName = MainDir
@@ -79,13 +82,6 @@ function Nova:listen(handler: () -> ())
     local faviconPath = `{cwd}/{mainDirName}/favicon.ico`
     local isDev = self.dev
 
-    local INTERNAL_ERROR_RESPONSE = {
-        status = 500,
-        body = encode("json", { error = "Internal Server Error" }),
-        headers = { ["Content-Type"] = "application/json" }
-    }
-
-    local FAVICON_EMPTY_RESPONSE = { status = 204 }
     local FAVICON_CACHED_RESPONSE: any = nil
 
     if isFile(faviconPath) then
@@ -94,8 +90,8 @@ function Nova:listen(handler: () -> ())
             body = readFile(faviconPath),
             headers = {
                 ["Content-Type"] = "image/x-icon",
-                ["Cache-Control"] = "public, max-age=86400"
-            }
+                ["Cache-Control"] = "public, max-age=86400",
+            },
         }
     end
 
@@ -109,10 +105,10 @@ function Nova:listen(handler: () -> ())
     local allMiddlewares = self.middlewares and table.clone(self.middlewares) or {}
 
     if isDev then
-        table.insert(allMiddlewares :: { Types.Middleware }, 1, devMiddleware :: Types.Middleware)
+        table.insert(allMiddlewares :: { common.Middleware }, 1, devMiddleware :: common.Middleware)
     end
 
-    local rootPipeline = Chain(allMiddlewares :: { Types.Middleware }, routeDispatcher)
+    local rootPipeline = Chain(allMiddlewares :: { common.Middleware }, routeDispatcher)
 
     serve(self.port, {
         address = "0.0.0.0",
@@ -124,37 +120,40 @@ function Nova:listen(handler: () -> ())
                         body = readFile(faviconPath),
                         headers = {
                             ["Content-Type"] = "image/x-icon",
-                            ["Cache-Control"] = "no-cache"
-                        }
+                            ["Cache-Control"] = "no-cache",
+                        },
                     }
                 end
-                return FAVICON_CACHED_RESPONSE or FAVICON_EMPTY_RESPONSE :: net.NetResponse
+                return FAVICON_CACHED_RESPONSE or { status = 204 }
             end
 
-            local success, result: Types.ResponsePayload 
-            | { statusCode: number, message: string } | any = pcall(rootPipeline, request)
-            
+            local success, result: common.ResponsePayload | { statusCode: number, message: string } | any =
+                pcall(rootPipeline, request)
+
             if not success then
                 statusLog(result.statusCode or 500, request)
                 if typeof(result) == "table" then
                     return {
                         status = result.statusCode,
-                        body = encode("json", { error = result.message }),
-                        headers = { ["Content-Type"] = "application/json" }
+                        body = json.encode({ error = result.message }),
+                        headers = { ["Content-Type"] = "application/json" },
                     }
                 else
                     local errorMessage = debug.traceback(tostring(result), 2)
                     print("\27[31m[Error]: \n" .. errorMessage .. "\27[0m")
 
-                    return INTERNAL_ERROR_RESPONSE :: net.NetResponse
+                    return {
+                        status = 500,
+                        body = json.encode({ error = "Internal Server Error" }),
+                        headers = { ["Content-Type"] = "application/json" },
+                    }
                 end
             end
-            
+
             local status: number?
             local headers = nil
 
             if result.config then
-                
                 status = result.config.status
                 headers = result.config.headers
             end
@@ -162,9 +161,9 @@ function Nova:listen(handler: () -> ())
             return {
                 status = status or 200,
                 body = result and result.body or nil,
-                headers = headers
+                headers = headers,
             }
-        end
+        end,
     })
 
     local finish = os.clock() - start
@@ -175,4 +174,4 @@ function Nova:listen(handler: () -> ())
     end
 end
 
-return Nova
+return Mayari

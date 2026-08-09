@@ -1,10 +1,10 @@
 export type RouteNode = {
-	children: { [string]: RouteNode },
-	dynamicChild: RouteNode?,
-	dynamicName: string?,
-	wildcardChild: RouteNode?,
-	wildcardName: string?,
-	module: any?,
+    children: { [string]: RouteNode },
+    dynamicChild: RouteNode?,
+    dynamicName: string?,
+    wildcardChild: RouteNode?,
+    wildcardName: string?,
+    module: any?,
 }
 
 type METHOD_MAP = {
@@ -14,31 +14,31 @@ type METHOD_MAP = {
 local staticRoutes: { [string]: any } = {}
 
 local routeTreeRoot: RouteNode = {
-	children = {},
-	dynamicChild = nil,
-	dynamicName = nil,
-	module = nil,
+    children = {},
+    dynamicChild = nil,
+    dynamicName = nil,
+    module = nil,
 }
 
 local METHOD_MAP = {
-	GET = "Get",
-	POST = "Post",
-	PUT = "Put",
-	DELETE = "Delete",
-	PATCH = "Patch",
-	HEAD = "Head",
+    GET = "Get",
+    POST = "Post",
+    PUT = "Put",
+    DELETE = "Delete",
+    PATCH = "Patch",
+    HEAD = "Head",
 } :: METHOD_MAP
 
 local function splitPath(path: string): { string }
-	local segments = {}
-	for segment in path:gmatch("[^/]+") do
-		table.insert(segments, segment)
-	end
-	return segments
+    local segments = {}
+    for segment in path:gmatch("[^/]+") do
+        table.insert(segments, segment)
+    end
+    return segments
 end
 
 local function createNode(): RouteNode
-	return { children = {} }
+    return { children = {} }
 end
 
 return {

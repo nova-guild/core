@@ -1,6 +1,6 @@
-local Types = require("@nova-types")
+local common = require("@mayari.common")
 
-local function Auth(_req: Types.Request)
+local function Auth(_req: common.Request)
     print("Auth Check")
 	return true
 end

@@ -1,5 +1,7 @@
 local runner = require("@test-runner")
-local fs = require("@adpt/fs")
+local adpt = require("@mayari.adpt")
+
+local fs = adpt.fs
 
 local FIXTURES = "./tests/fixtures/fs"
 

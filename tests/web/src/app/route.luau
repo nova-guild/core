@@ -1,5 +1,5 @@
-local Types = require("@nova-types")
-local Response = require("@utils/Response")
+local common = require("@mayari.common")
+local Response = common.response
 
 local Home = {}
 
@@ -10,7 +10,7 @@ function Home.Get()
 end
 
 --@Validator(createUser)
-function Home.Post(req: Types.Request)
+function Home.Post(req: common.Request)
     return Response.json({ msg = "Got the Response", data = req.body })
 end
 

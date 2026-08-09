@@ -1,5 +1,7 @@
-local fs = require("@adpt/fs")
+local adpt = require("@mayari.adpt")
 local runner = require("@self/runner")
+
+local fs = adpt.fs
 
 local function findTestFiles(dir: string): { string }
 	local results = {}

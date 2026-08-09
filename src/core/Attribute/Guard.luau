@@ -1,9 +1,9 @@
 local registry = require("./RegistryGenerator").registry
-local Response = require("../../utils/Response")
-local Types = require("../../types")
+local common = require("@mayari.common")
+local Exception = common.exception
 
 local function Guard(args: { string })
-    return function(req: Types.Request, next: Types.Next)
+    return function(req: common.Request, next: common.Next)
         local attribute = registry["Guard"]
 
         if not attribute then
@@ -20,7 +20,7 @@ local function Guard(args: { string })
             local isAllowed = rule(req)
 
             if not isAllowed then
-                return Response.json({ error = "Not Authorized" }, { status = 401 })
+                error(Exception.Unauthorized())
             end
         end
 

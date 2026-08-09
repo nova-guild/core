@@ -1,5 +1,7 @@
-local Response = require("@utils/Response")
+local common = require("@mayari.common")
 local UserService = require("./users.service")
+
+local Response = common.response
 
 local Users = {}
 

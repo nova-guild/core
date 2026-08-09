@@ -1,15 +1,15 @@
 {
-    "languageMode": "strict", 
+    "languageMode": "strict",
     "aliases": {
-        "utils": "./src/utils", 
-        "adpt": "./src/adapter/", 
-        "nova-types": "./src/types",  
-        "std": "~/.lute/typedefs/1.0.0/std", 
-        "lune": "~/.lune/.typedefs/0.10.4/", 
-        "test-runner": "./tests/runner", 
-        "core": "./src/core", 
-        "c": "/home/wiz/projects/nova-projects/nova_core/tests/web/", 
-        "lint": "~/.lute/typedefs/1.0.0/lint", 
+        "std": "~/.lute/typedefs/1.0.0/std",
+        "c": "/home/wiz/projects/mayari-org/mayari/tests/web/",
+        "mayari.common": "./packages/luau/common",
+        "mayari.adpt": "./packages/luau/adpt",
+        "core": "./src/core",
+        "lune": "~/.lune/.typedefs/0.10.4/",
+        "lint": "~/.lute/typedefs/1.0.0/lint",
+        "utils": "./src/utils",
+        "test-runner": "./tests/runner",
         "lute": "~/.lute/typedefs/1.0.0/lute"
     }
 }

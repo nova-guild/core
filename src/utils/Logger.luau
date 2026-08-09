@@ -32,10 +32,15 @@ local middlewareNames: { string } = {}
 local entries: { RouteEntry } = {}
 
 function RouteLogger.setMiddlewares(mws: { (any) -> any })
+    local unnamedCount = 1
+
     for _, mw in mws do
-        local name = debug.info(mw, "n") 
+        local name = debug.info(mw, "n")
         if name and name ~= "" then
             table.insert(middlewareNames, name)
+        else
+            table.insert(middlewareNames, `unnamed-middleware{unnamedCount}`)
+            unnamedCount += 1
         end
     end
 end
@@ -86,12 +91,12 @@ function RouteLogger.flush()
     local pathPad = 0
 
     for _, e in entries do
-        if #e.method > methodPad then 
-            methodPad = #e.method 
+        if #e.method > methodPad then
+            methodPad = #e.method
         end
 
-        if #e.path > pathPad then 
-            pathPad = #e.path 
+        if #e.path > pathPad then
+            pathPad = #e.path
         end
     end
 

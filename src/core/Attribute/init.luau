@@ -1,14 +1,14 @@
-local Types = require("../types")
+local common = require("@mayari.common")
 
 type Attributes = {
-    [string]: ({any}) -> (Types.Request, Types.Next) -> Types.ResponsePayload?
+    [string]: ({ any }) -> (common.Request, common.Next) -> common.ResponsePayload?,
 }
 
 --[[
     List of current implemented attributes
 ]]
 return {
-	Guard = require("@self/Guard"),
+    Guard = require("@self/Guard"),
     Interceptor = require("@self/Interceptor"),
-    Validator = require("@self/Validator")
+    Validator = require("@self/Validator"),
 } :: Attributes

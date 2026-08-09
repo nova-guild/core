@@ -1,11 +1,13 @@
-local fs = require("../../adapter/fs")
-local process = require("../../adapter/process")
+local adpt = require("@mayari.adpt")
 local registerRoute = require("./RegisterRoute")
 local AttributeResolver = require("../Attribute/Resolver")
 local Attributes = require("../Attribute")
 local Chain = require("../../utils/Chain")
 local RouteHelper = require("./Helpers")
 local RouteLogger = require("../../utils/Logger")
+
+local fs = adpt.fs
+local process = adpt.process
 
 local METHOD_NAMES = RouteHelper.METHOD_MAP
 local readDir = fs.readDir
@@ -82,17 +84,16 @@ local function generateRoute(currentDir: string, currentRoute: string)
             local extractedAttributes = AttributeResolver.extractAttribute(source)
 
             local modulePath = currentDir .. "/route"
-            
+
             local routeKey = currentRoute == "" and "/" or currentRoute
-            
+
             local routeModule = require(modulePath) :: any
 
             applyAttributes(routeModule, extractedAttributes, routeKey)
 
             registerRoute(routeKey, routeModule)
-            
-            -- print(`\27[32mRegistered Route: {routeKey}\27[0m`)
 
+            -- print(`\27[32mRegistered Route: {routeKey}\27[0m`)
         elseif metadata(resolvedPath).kind == "dir" or metadata(resolvedPath).kind == "directory" then
             local nextRoute = currentRoute .. "/" .. item
             generateRoute(path, nextRoute)
