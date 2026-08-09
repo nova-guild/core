@@ -1,8 +1,8 @@
 local registry = require("./RegistryGenerator").registry
-local Response = require("../../utils/Response")
-local Types = require("../../types")
+local common = require("@mayari.common")
+local Response = common.response
 
-local function validateBody(schema: { [string]: Types.BodyField }, data: { [string]: any }): { string }
+local function validateBody(schema: { [string]: common.BodyField }, data: { [string]: any }): { string }
     local errors = {}
 
     for field, rules in schema do
@@ -48,7 +48,7 @@ local function validateBody(schema: { [string]: Types.BodyField }, data: { [stri
     return errors
 end
 
-local function validateString(schema: { [string]: Types.StringField }, data: { [string]: any }): { string }
+local function validateString(schema: { [string]: common.StringField }, data: { [string]: any }): { string }
     local errors = {}
 
     for field, rules in schema do
@@ -82,7 +82,7 @@ local function validateString(schema: { [string]: Types.StringField }, data: { [
 end
 
 local function Validator(args: { string })
-    return function(req: Types.Request, next: Types.Next)
+    return function(req: common.Request, next: common.Next)
         local attribute = registry["Validator"]
 
         if not attribute then
@@ -90,7 +90,7 @@ local function Validator(args: { string })
         end
 
         for _, arg in ipairs(args) do
-            local rule = (attribute[arg] :: any) :: Types.ValidatorSchema
+            local rule = (attribute[arg] :: any) :: common.ValidatorSchema
 
             if not rule then
                 continue
@@ -119,7 +119,7 @@ local function Validator(args: { string })
             if #errors > 0 then
                 return Response.json({
                     message = errors,
-                    error = "Bad Request"
+                    error = "Bad Request",
                 }, { status = 400 })
             end
         end

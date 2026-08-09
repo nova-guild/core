@@ -11,3 +11,5 @@ node_modules/
 # vitepress
 docs/.vitepress/dist
 docs/.vitepress/cache
+packages/
+.lpm-patch/

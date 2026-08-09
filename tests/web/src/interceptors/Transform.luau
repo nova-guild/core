@@ -1,6 +1,6 @@
-local Types = require("@nova-types")
+local common = require("@mayari.common")
 
-local function Transform(_req: Types.Request, next: Types.Next)
+local function Transform(_req: common.Request, next: common.Next)
     next()
 end
 

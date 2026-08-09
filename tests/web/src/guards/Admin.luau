@@ -1,8 +1,8 @@
-local Types = require("@nova-types")
+local common = require("@mayari.common")
 
-local function Auth(_req: Types.Request)
+local function Admin(_req: common.Request)
     print("Admin Check")
 	return true
 end
 
-return Auth
+return Admin

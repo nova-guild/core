@@ -1,25 +1,26 @@
-local serde = require("../adapter/serde")
-local fs = require("../adapter/fs")
-local process = require("../adapter/process")
+local adpt = require("@mayari.adpt")
+local json = adpt.json
+local fs = adpt.fs
+local process = adpt.process
 
 local function generateAlias()
-	local luauarcPath = process.cwd .. "/.luaurc"
+    local luauarcPath = process.cwd .. "/.luaurc"
 
-	if not luauarcPath then
-		error("Luaurc file is not found in your project.")
-	end
+    if not luauarcPath then
+        error("Luaurc file is not found in your project.")
+    end
 
-	local luaurcJson = fs.readFile(luauarcPath)
-	local decoded = serde.decode("json", luaurcJson)
+    local luaurcJson = fs.readFile(luauarcPath)
+    local decoded = json.decode(luaurcJson)
 
-	if not decoded.aliases then
-		decoded.aliases = {}
-	end
+    if not decoded.aliases then
+        decoded.aliases = {}
+    end
 
-	decoded.aliases.c = process.cwd
+    decoded.aliases.c = process.cwd
 
-	local encoded = serde.encode("json", decoded, true)
-	fs.writeFile(luauarcPath, encoded)
+    local encoded = json.encode(decoded)
+    fs.writeFile(luauarcPath, encoded)
 end
 
 return generateAlias

@@ -1,16 +1,18 @@
-local Nova = require("@nova")
-local process = require("@adpt/process")
+local mayari = require("@mayari")
+local adpt = require("@mayari.adpt")
+
+local process = adpt.process
 
 local PORT = tonumber(process.env.PORT) or 8080
-local app = Nova.new(PORT, {
-    Test1 = function(_req, next)
-        next()
+local app = mayari.new(PORT, {
+    function(_req, next)
+        return next()
     end,
-    Test2 = function(_req, next)
-        next()
+    function(_req, next)
+        return next()
     end
 })
 
 app:listen(function()
-	print(`Nova is running on Port {PORT}`)
+	print(`Mayari is running on Port {PORT}`)
 end)

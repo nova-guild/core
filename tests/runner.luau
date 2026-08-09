@@ -1,4 +1,6 @@
-local process = require("@adpt/process")
+local adpt = require("@mayari.adpt")
+
+local process = adpt.process
 
 export type Expected = {
 	toBe: (expected: any) -> (),

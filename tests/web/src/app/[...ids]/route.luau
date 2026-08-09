@@ -1,8 +1,8 @@
-local Types = require("@nova-types")
-local Response = require("@utils/Response")
+local common = require("@mayari.common")
+local Response = common.response
 local Home = {}
 
-function Home.Get(req: Types.RequestWith<{ ids: { string } }>)
+function Home.Get(req: common.RequestWith<{ ids: { string } }>)
 	local userIds = req.params.ids
 	return Response.json({ userIds = userIds, msg = "Found user IDs" })
 end

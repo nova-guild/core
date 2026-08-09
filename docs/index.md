@@ -4,8 +4,7 @@ layout: home
 
 hero:
   name: "Mayari"
-  text: "Web Framework"
-  tagline: A convention-driven, runtime-agnostic web framework for Luau.
+  text: "An Adaptive Luau Web Backend Framework"
   image:
     src: /mayari.png
     alt: Mayari

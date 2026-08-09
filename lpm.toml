@@ -1,0 +1,37 @@
+[package]
+name = "mayari/core"
+version = "0.6.0"
+description = "An Adaptive Luau Web Backend Framework."
+authors = ["mayari-org"]
+repository = "https://github.com/mayari-org/mayari"
+license = "MIT"
+
+[target]
+environment = "luau"
+main = "src/index.luau"
+includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
+
+[scripts]
+"dev:lute" = "lute run dev"
+"dev:lune" = "lune run dev"
+"dev:zune" = "zune run dev"
+
+"start:lute" = "lute run start"
+"start:lune" = "lune run start"
+"start:zune" = "zune run start"
+
+"test" = "lute run test && lune run test && zune run test"
+"format:check" = "stylua -c src/"
+"format:fix" = "stylua src/"
+"lint:check" = "selene src/"
+
+[tools]
+lute = "luau-lang/lute@1.0.0"
+lune = "lune-org/lune@0.10.4"
+zune = "Scythe-Technology/zune@0.5.6"
+StyLua = "JohnnyMorganz/StyLua@2.5.2"
+selene = "Kampfkarren/selene@0.31.0"
+
+[dependencies]
+common = { name = "mayari/common", version = "^" }
+adpt = { name = "mayari/adpt", version = "^" }
