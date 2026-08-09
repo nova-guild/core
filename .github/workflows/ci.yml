@@ -22,9 +22,7 @@ jobs:
           sudo mv lpm /usr/local/bin/lpm
           rm lpm.zip
           lpm self install
-          echo 'export PATH="/home/runner/.lpm/bin:$PATH"' >> ~/.bashrc
-          source ~/.bashrc
-          lpm --version
+          echo "$HOME/.lpm/bin" >> $GITHUB_PATH
 
       - name: Install Dependencies
         run: |
