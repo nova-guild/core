@@ -21,7 +21,7 @@ includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
 "start:zune" = "zune run start"
 
 "test" = "lute run test && lune run test && zune run test"
-"format:check" = "stylua -c src/"
+"format:check" = "Stylua -c src/"
 "format:fix" = "stylua src/"
 "lint:check" = "selene src/"
 
