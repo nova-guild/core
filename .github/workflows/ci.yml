@@ -21,10 +21,13 @@ jobs:
           chmod +x lpm
           sudo mv lpm /usr/local/bin/lpm
           rm lpm.zip
+          lpm self install
+          echo 'export PATH="/home/runner/.lpm/bin:$PATH"' >> ~/.bashrc
+          source ~/.bashrc
+          lpm --version
 
       - name: Install Dependencies
         run: |
-          lpm self install
           lpm i
 
       - name: Run Test
