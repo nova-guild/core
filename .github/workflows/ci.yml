@@ -24,6 +24,7 @@ jobs:
 
       - name: Install Dependencies
         run: |
+          lpm self install
           lpm i
 
       - name: Run Test
