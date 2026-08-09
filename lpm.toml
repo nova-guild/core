@@ -22,14 +22,14 @@ includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
 
 "test" = "lute run test && lune run test && zune run test"
 "format:check" = "Stylua -c src/"
-"format:fix" = "stylua src/"
+"format:fix" = "Stylua src/"
 "lint:check" = "selene src/"
 
 [tools]
 lute = "luau-lang/lute@1.0.0"
 lune = "lune-org/lune@0.10.4"
 zune = "Scythe-Technology/zune@0.5.6"
-styLua = "JohnnyMorganz/StyLua@2.5.2"
+StyLua = "JohnnyMorganz/StyLua@2.5.2"
 selene = "Kampfkarren/selene@0.31.0"
 
 [dependencies]
