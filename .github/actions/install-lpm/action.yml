@@ -1,0 +1,13 @@
+name: "Install LPM"
+runs:
+  using: "composite"
+  steps:
+    - shell: bash
+      run: |
+        curl -f -L "https://github.com/luaupm/lpm/releases/download/v0.5.2/lpm-linux-x86_64.zip" -o lpm.zip
+        unzip -j lpm.zip
+        chmod +x lpm
+        sudo mv lpm /usr/local/bin/lpm
+        rm lpm.zip
+        lpm self install
+        echo "$HOME/.lpm/bin" >> $GITHUB_PATH

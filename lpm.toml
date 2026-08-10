@@ -29,7 +29,7 @@ includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
 lute = "luau-lang/lute@1.0.0"
 lune = "lune-org/lune@0.10.4"
 zune = "Scythe-Technology/zune@0.5.6"
-StyLua = "JohnnyMorganz/StyLua@2.5.2"
+stylua = "JohnnyMorganz/StyLua@2.5.2"
 selene = "Kampfkarren/selene@0.31.0"
 
 [dependencies]
