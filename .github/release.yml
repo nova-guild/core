@@ -4,10 +4,10 @@ changelog:
       labels: [breaking-changes]
     - title: Features
       labels: [features]
-    - title: Fixes
-      labels: [fixes]
     - title: Hotfixes
       labels: [hotfixes]
+    - title: Fixes
+      labels: [fixes]
     - title: Docs
       labels: [docs]
     - title: Workflow
