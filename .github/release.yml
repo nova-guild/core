@@ -1,0 +1,20 @@
+changelog:
+  categories:
+    - title: Breaking Changes
+      labels: [breaking-changes]
+    - title: Features
+      labels: [features]
+    - title: Fixes
+      labels: [fixes]
+    - title: Hotfixes
+      labels: [hotfixes]
+    - title: Docs
+      labels: [docs]
+    - title: Workflow
+      labels: [workflow]
+    - title: Maintenance
+      labels: [maintenance]
+    - title: Performance
+      labels: [performance]
+    - title: Other Changes
+      labels: ["*"]
