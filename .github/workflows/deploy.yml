@@ -1,4 +1,4 @@
-name: Deploy Nova Docs
+name: Deploy Mayari Docs
 
 on:
   push:

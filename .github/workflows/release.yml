@@ -1,4 +1,4 @@
-name: Create Release and Notify Discord
+name: Create Release
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
       - 'v*.*.*'
 
 jobs:
-  release:
+  create-github-release:
     name: Create GitHub Release
     runs-on: ubuntu-latest
     permissions:
@@ -14,33 +14,29 @@ jobs:
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
         with:
           fetch-depth: 0
 
-      - name: Extract and Linkify Changelog
-        id: changelog
+      - name: Generate Release Notes
+        id: notes
+        env:
+          GH_TOKEN: ${{ github.token }}
         run: |
-          TAG="${GITHUB_REF_NAME}"
-          CHANGELOG="docs/docs/blog/changelog.md"
-
-          BODY=$(awk "
-            /^## \`${TAG}\`/ { found=1; next }
-            found && /^## \`v[0-9]+\.[0-9]+\.[0-9]+\`/ { exit }
-            found { print }
-          " "$CHANGELOG")
-
-          LINKIFIED_BODY=$(echo "$BODY" | sed -E 's|\(#([0-9]+)\)|([#\1](https://github.com/'"${GITHUB_REPOSITORY}"'/pull/\1))|g')
+          BODY=$(gh api \
+            "repos/${{ github.repository }}/releases/generate-notes" \
+            -f tag_name="${{ github.ref_name }}" \
+            --jq '.body')
 
           echo "body<<EOF" >> $GITHUB_OUTPUT
-          echo "$LINKIFIED_BODY" >> $GITHUB_OUTPUT
+          echo "$BODY" >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
 
       - name: Create GitHub Release
         id: create_release
         uses: softprops/action-gh-release@v2
         with:
-          body: ${{ steps.changelog.outputs.body }}
+          body: ${{ steps.notes.outputs.body }}
           make_latest: true
 
       - name: Send Discord Notification
@@ -50,13 +46,36 @@ jobs:
           webhook: ${{ secrets.DISCORD_WEBHOOK }}
           content: "@everyone A new update has been published!"
           title: ""
-          notitle: true 
+          notitle: true
           description: |
-            ## [🍁 ${{ github.ref_name }}](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})
-            
-            ${{ steps.changelog.outputs.body }}
-          
+            ## [🌖 ${{ github.ref_name }}](https://github.com/${{ github.repository }}/releases/tag/${{ github.ref_name }})
+
+            ${{ steps.notes.outputs.body }}
+
           nodetail: true
-          color: 0xA728F3
-          username: Nova Release
-          avatar_url: https://raw.githubusercontent.com/nova-guild/nova/main/nova-release.png
+          color: 0xEBE9EB
+          username: Mayari Release
+          avatar_url: https://raw.githubusercontent.com/mayari-org/mayari/main/docs/public/mayari.png
+
+  publish-pkg:
+    name: Publish Package
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - uses: ./.github/actions/install-lpm
+      - run: lpm --version
+
+      - name: Restore LPM credentials
+        run: |
+          mkdir -p ~/.lpm
+          echo "${{ secrets.LPM_CREDENTIALS_B64 }}" | base64 -d > ~/.lpm/credentials.toml
+          chmod 600 ~/.lpm/credentials.toml
+
+      - name: Publish
+        run: lpm publish
