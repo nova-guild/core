@@ -17,7 +17,7 @@ local Home = {}
 
 --@Validator(CreateUser)
 function Home.Post()
-    return Nova.response.json({ message = "User created" })
+    return response.json({ message = "User created" })
 end
 
 return Home

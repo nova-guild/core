@@ -1,5 +1,7 @@
 # Getting Started
 
+***OUTDATED!***
+
 The fastest way to get a Mayari project running is by using our scaffolding tool, but you can also set things up manually if you prefer.
 
 ## Prerequisites
@@ -56,7 +58,7 @@ If you prefer doing things yourself, follow these steps.
 Add Mayari to your project using `pesde`:
 
 ```bash
-pesde add bizwiz3/nova
+pesde add nova/core
 pesde install
 ```
 

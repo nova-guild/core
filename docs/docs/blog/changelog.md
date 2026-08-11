@@ -1,5 +1,7 @@
 # Changelog
 
+***OUTDATED!***
+
 ## `v0.6.0` - June 2, 2026
 
 ***`Nova.chain()` has been removed from the public API. Route-specific middleware is now handled exclusively through Attributes (`--@Guard`, `--@Interceptor`, `--@Validator`).***

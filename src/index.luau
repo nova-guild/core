@@ -12,6 +12,7 @@ local adpt = require("@mayari.adpt")
 export type Next = common.Next
 export type Mayari = common.Mayari
 export type Middleware = common.Middleware
+export type Middleware2 = (req: Request | RequestWith<any>, next: Next) -> ResponsePayload?
 export type Handler = common.Handler
 export type Request = common.Request
 export type RequestWith<T> = common.RequestWith<T>
@@ -61,7 +62,7 @@ local function devMiddleware(req: common.Request, next: common.Next)
     statusLog(status, req)
 end
 
-function Mayari.new(port: number, middlewares: { Middleware }?)
+function Mayari.new(port: number, middlewares: { any }?)
     local self = setmetatable({} :: MayariPrivate, Mayari)
     self.port = port
     self.middlewares = middlewares

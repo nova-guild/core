@@ -20,7 +20,7 @@ end
 
 ### Request Properties
 
-A standard `Nova.Request` contains:
+A standard `common.Request` contains:
 
 - **method:** The HTTP method (e.g., `"GET"`, `"POST"`).
 - **path:** The exact URL path requested.
@@ -33,17 +33,17 @@ A standard `Nova.Request` contains:
 
 Mayari provides two main types for requests. You can access these by requiring Mayari in your route file.
 
-### 1. `Nova.Request`
+### 1. `common.Request`
 
 Use this for standard routes where you don't need specific autocomplete for parameters or query strings.
 
 ```luau
-function Home.Get(req: Nova.Request)
+function Home.Get(req: common.Request)
     local method = req.method -- This will show when you type it
 end
 ```
 
-### 2. `Nova.RequestWith<T>`
+### 2. `common.RequestWith<T>`
 
 Use this when you want to add type-checking and autocomplete for `req.params` or `req.query`.
 
@@ -53,7 +53,7 @@ Types are for your editor's benefit. Mayari does not automatically convert types
 
 ```luau
 -- We tell the editor to expect an 'id' string
-function User.Get(req: Nova.RequestWith<{ id: string }>)
+function User.Get(req: common.RequestWith<{ id: string }>)
     local userId = req.params.id -- Autocomplete works here!
 end
 ```
@@ -66,11 +66,11 @@ Mayari provides a `response` utility to handle the **boring stuff** like setting
 
 There are 5 methods available:
 
-- `Nova.response.send(string)` Plain text.
-- `Nova.response.json(table)` JSON data (automatically encoded).
-- `Nova.response.html(string)` HTML content.
-- `Nova.response.css(string)` CSS content.
-- `Nova.response.js(string)` JavaScript content.
+- `common.response.send(string)` Plain text.
+- `common.response.json(table)` JSON data (automatically encoded).
+- `common.response.html(string)` HTML content.
+- `common.response.css(string)` CSS content.
+- `common.response.js(string)` JavaScript content.
 
 ### The Response Config
 
@@ -80,7 +80,7 @@ The `config` is an optional table where you can define a custom **status code** 
 ```luau
 function User.Get()
    -- Sending a 404 Not Found with a JSON body
-    return Nova.response.json(
+    return response.json(
         { errorMsg = "User not found" }, 
         { status = 404 }
     ) 
@@ -90,12 +90,12 @@ end
 You can also set custom headers, which is useful for things like authentication or custom metadata:
 
 ```luau
-return Nova.response.json(
+return response.json(
     { message = "Success" },
     { 
         status = 200,
         headers = {
-            ["X-Custom-Header"] = "Nova-Framework"
+            ["X-Custom-Header"] = "Mayari-Framework"
         }
     }
 )
@@ -104,6 +104,6 @@ return Nova.response.json(
 ## Summary
 
 - **Naming:** Call the first parameter `req`, `request`, or `banana`, it’s always the Request object.
-- **Types:** Use `Nova.Request` for simplicity, or `Nova.RequestWith<T>` for additional params and query autocomplete.
+- **Types:** Use `common.Request` for simplicity, or `common.RequestWith<T>` for additional params and query autocomplete.
 - **Headers:** All incoming header keys are converted to **lowercase**.
-- **Responses:** Use `Nova.response` methods with the `(body, config)` pattern to stay organized.
+- **Responses:** Use `common.response` methods with the `(body, config)` pattern to stay organized.

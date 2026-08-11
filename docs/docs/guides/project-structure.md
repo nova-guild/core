@@ -36,12 +36,12 @@ The entry point is the file you run to start your server. By placing it inside `
 Its job is to initialize Mayari and tell it where to find your routes:
 
 ```luau
-local Nova = require("path/to/nova")
+local Mayari = require("@mayari")
 
-local app = Nova.new(8080)
+local app = Mayari.new(8080)
 
 app:listen(function()
-    print("Server started on http://localhost:8080")
+    print("Server started on PORT 8080")
 end)
 ```
 
@@ -53,6 +53,16 @@ lune run src/main
 lute run src/main
 # or
 zune run src/main
+```
+
+And for the logger to log information, you simply add the keyword `dev` at the end of the command
+
+```bash
+lune run src/main dev
+# or
+lute run src/main dev
+# or
+zune run src/main dev
 ```
 
 ## The `app` Directory
@@ -85,8 +95,8 @@ A folder is only registered as a route if it contains a file named exactly `rout
 
 | Location | Role | Description |
 | :--- | :--- | :--- |
-| Root (`/`) | Configuration | For `pesde.toml`, `.gitignore`, and tool configs. |
-| `src/main.luau` | Entry Point | The file that initializes and starts your server. |
+| Root (`/`) | Configuration | For `lpm.toml`, `.gitignore`, and tool configs. |
+| `src/main.luau` | Entry Point | The file that initializes and starts your server (it doesn't have to be named as main). |
 | `src/app/` | Routing Root | Where Mayari looks for your API structure. |
 | `<feature>/` | Feature Module | A self-contained folder per part of your app. |
 | `route.luau` | Route Handler | The required filename to turn a folder into a URL. |

@@ -27,13 +27,15 @@ This keeps your project organized by default and lets you focus on writing the a
 In Mayari, a basic "Hello World" route looks like this:
 
 ```luau
-local Nova = require("path/to/nova")
+local Mayari = require("@mayari")
+local common = require("@mayari.common")
+local response = common.response
 
 local Home = {}
 
 -- This function runs when someone sends a GET request to this path
 function Home.Get()
-    return Nova.response.json({ message = "Hello, world!" })
+    return response.json({ message = "Hello, world!" })
 end
 
 return Home

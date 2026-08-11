@@ -13,11 +13,14 @@ Guard → Validator → Interceptor → Route Handler`
 Apply an Interceptor to a route handler using the `--@Interceptor` comment above the function:
 
 ```luau
+local common = require("@mayari.common")
+local response = common.response
+
 local Home = {}
 
 --@Interceptor(Transform)
 function Home.Get()
-    return Nova.response.send("Hello, World")
+    return response.send("Hello, World")
 end
 
 return Home
@@ -28,7 +31,7 @@ Multiple rules can be passed:
 ```luau
 --@Interceptor(Logger, Transform)
 function Home.Get()
-    return Nova.response.send("Hello, World")
+    return response.send("Hello, World")
 end
 ```
 
@@ -38,9 +41,9 @@ Interceptor Rules live in `src/interceptors/`. Each file exports a single functi
 
 ```luau
 -- src/interceptors/Logger.luau
-local Nova = require("@nova")
+local common = require("@mayari.common")
 
-local function Logger(req: Nova.Request, next: Nova.Next)
+local function Logger(req: common.Request, next: common.Next)
     print(`[{req.method}] {req.path}`)
     next()
 end
@@ -53,9 +56,9 @@ return Logger
 Interceptors follow the **Onion Pattern**. Calling `next()` dives into the remaining pipeline — the next Interceptor rule or the final route handler. Any code after `next()` runs once the handler has finished, on the way back out.
 
 ```luau
-local Nova = require("@nova")
+local common = require("@mayari.common")
 
-local function Logger(_req: Nova.Request, next: Nova.Next)
+local function Logger(_req: common.Request, next: common.Next)
     local start = os.clock()
 
     next()
@@ -72,20 +75,14 @@ return Logger
 If you return a value from an Interceptor rule, it replaces whatever the handler returned. This is how you transform or override responses:
 
 ```luau
-local Nova = require("@nova")
+local common = require("@mayari.common")
 
-local function Transform(_req: Nova.Request, next: Nova.Next)
+local function Transform(_req: common.Request, next: common.Next)
     next()
-    return Nova.response.json({ message = "Intercepted" })
+    return response.json({ message = "Intercepted" })
 end
 
 return Transform
 ```
 
 Here, `next()` still runs the handler, but since `Transform` does not capture its return value, it replaces the response with its own.
-
-To respond, you can return a raw table with `body` and `config`, or use the `Nova.response` helpers:
-
-```luau
-return Nova.response.json({ message = "Hello" }, { status = 200, headers = {} })
-```
