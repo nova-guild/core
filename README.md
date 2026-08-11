@@ -7,8 +7,8 @@
     </h3>
     <a href="https://luaupm.com/package?name=mayari%2Fcore"><img alt="LPM" src="https://img.shields.io/badge/lpm-mayari/core-e61048?style=for-the-badge&labelColor=000"></a>
     <a href="https://pesde.dev/packages/bizwiz3/nova"><img alt="Pesde Package" src="https://img.shields.io/badge/pesde-bizwiz3/nova-F19D1E?style=for-the-badge&labelColor=000"></a>
-    <a href="https://nova-guild.github.io/nova/"><img alt="Nova Documentation" src="https://img.shields.io/badge/nova-documentation-292928?style=for-the-badge&labelColor=000"></a>
-    <a href="https://github.com/nova-guild/nova/actions/workflows/ci.yml"><img alt="CI Status" src="https://img.shields.io/github/actions/workflow/status/nova-guild/nova/ci.yml?style=for-the-badge&label=CI&labelColor=000"></a>
+    <a href="https://mayari-org.github.io/mayari/"><img alt="Mayari Documentation" src="https://img.shields.io/badge/mayari-documentation-292928?style=for-the-badge&labelColor=000"></a>
+    <a href="https://github.com/mayari-org/mayari/actions/workflows/ci.yml"><img alt="CI Status" src="https://img.shields.io/github/actions/workflow/status/mayari-org/mayari/ci.yml?style=for-the-badge&label=CI&labelColor=000"></a>
 </div>
 
 

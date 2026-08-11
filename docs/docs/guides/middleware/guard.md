@@ -13,11 +13,14 @@ Guard → Validator → Interceptor → Route Handler
 Apply a Guard to a route handler using the `--@Guard` comment above the function:
 
 ```luau
+local common = require("@mayari.common")
+local response = common.response
+
 local Home = {}
 
 --@Guard(Auth)
 function Home.Get()
-    return Nova.response.send("Hello, World")
+    return response.send("Hello, World")
 end
 
 return Home
@@ -28,7 +31,7 @@ Multiple rules can be passed to a single Guard:
 ```luau
 --@Guard(Auth, Admin)
 function Home.Get()
-    return Nova.response.send("Hello, World")
+    return response.send("Hello, World")
 end
 ```
 
@@ -40,9 +43,9 @@ Guard Rules live in `src/guards/`. Each file exports a single function that rece
 
 ```luau
 -- src/guards/Auth.luau
-local Nova = require("@nova")
+local common = require("@mayari.common")
 
-local function Auth(req: Nova.Request)
+local function Auth(req: common.Request)
     return true -- allow the request
 end
 
@@ -53,14 +56,14 @@ If the rule returns `false`, Mayari responds with `401 Unauthorized` and the pip
 
 ## Throwing Exceptions
 
-Returning `false` always produces a `401`. If you need a different status code, use `Nova.exception` with Luau's `error()` instead:
+Returning `false` always produces a `401`. If you need a different status code, use `common.exception` with Luau's `error()` instead:
 
 ```luau
-local Nova = require("@nova")
-local Exception = Nova.exception
+local common = require("@mayari.common")
+local exception = common.exception
 
-local function Auth(req: Nova.Request)
-    error(Exception.Forbidden())
+local function Auth(req: common.Request)
+    error(exception.Forbidden())
 end
 
 return Auth
@@ -71,7 +74,7 @@ return Auth
 You can also pass a custom message:
 
 ```luau
-error(Exception.Forbidden("You do not have access to this resource"))
+error(exception.Forbidden("You do not have access to this resource"))
 ```
 
 See the [Exception](/docs/guides/exception) page for all available exceptions.

@@ -35,30 +35,30 @@ end
 If you have Global Middleware `A`, Attribute `B`, and Handler `C`:
 
 ```bash
-A (before next) → B (before next) → C (Handler) → B (after next) → A (after next)
+A (before next) → B (before next) → C (Handler) → B (Only if B is an interceptor attribute) (after next) → A
 ```
 
 ## Global Middleware
 
 Global middleware runs on **every single request** made to your server. These are defined when you initialize your Mayari application.
 
-`Nova.new()` accepts an optional second argument: a table of middleware functions.
+`Mayari.new()` accepts an optional second argument: a table of middleware functions.
 
 ```luau
-local Nova = require("path/to/nova")
+local Mayari = require("@mayari")
 
-local app = Nova.new(8080, {
+local app = Mayari.new(8080, {
     myMiddleware1 = function(req, next)
         print(`[{req.method}] {req.path}`)
         next()
     end,
-    myMiddleware1 = function(req, next)
+    myMiddleware2 = function(req, next)
         next()
     end
 })
 
 app:listen(function()
-    print("Server running on http://localhost:8080")
+    print("Server is running on PORT 8080")
 end)
 ```
 
@@ -76,7 +76,7 @@ local Home = {}
 --@Guard(Auth)
 --@Interceptor(Transform)
 function Home.Get()
-    return Nova.response.send("Hello, World")
+    return response.send("Hello, World")
 end
 
 return Home
@@ -114,6 +114,6 @@ See the dedicated pages for each Attribute to learn how to define Rules.
 
 ## Important Notes
 
-- **Always call `next()`** in global middleware. If you do not, the request will never reach the handler unless you are intentionally returning an early response.
+- **Always call `next()`** in global middlewares and interceptors. If you don't, the request will never reach the handler unless you are intentionally returning an early response.
 - **Global middleware runs first**, before any Attributes on the route.
 - **Attributes are route-specific** — they have no effect on routes that do not declare them.

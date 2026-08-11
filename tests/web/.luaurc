@@ -1,12 +1,12 @@
 {
     "aliases": {
-        "mayari": "../../src/index",
-        "std": "~/.lute/typedefs/1.0.0/std",
-        "c": "/home/wiz/projects/mayari-org/mayari/tests/web/",
-        "lint": "~/.lute/typedefs/1.0.0/lint",
-        "mayari.common": "../../packages/luau/common",
-        "mayari.adpt": "../../packages/luau/adpt",
-        "lune": "~/.lune/.typedefs/0.10.4/",
+        "std": "~/.lute/typedefs/1.0.0/std", 
+        "c": "/home/wiz/projects/mayari-org/mayari/tests/web/", 
+        "mayari.common": "../../packages/luau/common", 
+        "mayari.adpt": "../../packages/luau/adpt", 
+        "mayari": "../../src/index", 
+        "lune": "~/.lune/.typedefs/0.10.4/", 
+        "lint": "~/.lute/typedefs/1.0.0/lint", 
         "lute": "~/.lute/typedefs/1.0.0/lute"
     }
 }
