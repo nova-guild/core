@@ -1,8 +1,7 @@
 {
     "languageMode": "strict", 
     "aliases": {
-        "std": "~/.lute/typedefs/1.0.0/std", 
-        "c": "/home/wiz/projects/mayari-org/mayari/tests/web/", 
+        "std": "~/.lute/typedefs/1.0.0/std",
         "mayari.common": "./packages/luau/common", 
         "mayari.adpt": "./packages/luau/adpt", 
         "core": "./src/core", 
