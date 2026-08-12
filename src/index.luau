@@ -2,7 +2,7 @@ local routeDispatcher = require("./core/Routing/Dispatcher")
 local generateRoute = require("./core/Routing/Generator")
 local loadEnv = require("./utils/LoadEnv")
 local MainDir = require("./utils/MainDir")
-local generateAlias = require("./utils/GenerateAlias")
+local alias = require("./utils/Alias")
 local attrRegistryGenerator = require("./core/Attribute/RegistryGenerator")
 local RouteLogger = require("./utils/Logger")
 local Chain = require("./utils/Chain")
@@ -69,7 +69,7 @@ function Mayari.new(port: number, middlewares: { any }?)
     self.dev = table.find(process.args, "dev") ~= nil
 
     loadEnv()
-    generateAlias()
+    alias.set("c", cwd)
 
     return self :: Mayari
 end
