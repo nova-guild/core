@@ -2,6 +2,7 @@
     "languageMode": "strict", 
     "aliases": {
         "std": "~/.lute/typedefs/1.0.0/std",
+        "c": "/path/to/placeholder",
         "mayari.common": "./packages/luau/common", 
         "mayari.adpt": "./packages/luau/adpt", 
         "core": "./src/core", 
@@ -9,7 +10,6 @@
         "lint": "~/.lute/typedefs/1.0.0/lint", 
         "utils": "./src/utils", 
         "test-runner": "./tests/runner", 
-        "lute": "~/.lute/typedefs/1.0.0/lute",
-        "c": "/path/to/placeholder"
+        "lute": "~/.lute/typedefs/1.0.0/lute"
     }
 }
