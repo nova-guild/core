@@ -21,22 +21,23 @@ function Alias.set(name: string, value: string)
         fs.writeFile(".luaurc", luaurc)
     else
         local aliasStart = luaurc:find('"aliases"') :: number
-        local blockClose = luaurc:find('}', aliasStart) :: number
+        local blockClose = luaurc:find("}", aliasStart) :: number
 
-        local isEmpty = luaurc:sub(aliasStart, blockClose):match('{%s*}') ~= nil
+        local isEmpty = luaurc:sub(aliasStart, blockClose):match("{%s*}") ~= nil
 
         local detectedIndent = luaurc:match('"aliases"%s*:%s*{%s*\n(%s*)"', aliasStart)
-        local detectedClose = luaurc:match('\n(%s*)}', aliasStart)
+        local detectedClose = luaurc:match("\n(%s*)}", aliasStart)
         local baseIndent: string = luaurc:match('\n(%s*)"aliases"') or ""
 
         local entryIndent: string = (not isEmpty and detectedIndent) or (baseIndent .. "  ")
         local closeIndent: string = detectedClose or baseIndent
 
-        local aliasEntry = (isEmpty and "" or ',') .. '\n' .. entryIndent .. '"' .. name .. '": "' .. value .. '"'
+        local aliasEntry = (isEmpty and "" or ",") .. "\n" .. entryIndent .. '"' .. name .. '": "' .. value .. '"'
 
-        luaurc = luaurc:sub(1, blockClose - 1):gsub('%s+$', '')
+        luaurc = luaurc:sub(1, blockClose - 1):gsub("%s+$", "")
             .. aliasEntry
-            .. '\n' .. closeIndent
+            .. "\n"
+            .. closeIndent
             .. luaurc:sub(blockClose)
 
         fs.writeFile(".luaurc", luaurc)
@@ -55,25 +56,16 @@ function Alias.remove(name: string)
         return
     end
 
-    local escapedName = name:gsub('([%(%)%.%%%+%-%*%?%[%]%^%$])', '%%%1')
+    local escapedName = name:gsub("([%(%)%.%%%+%-%*%?%[%]%^%$])", "%%%1")
 
-    local newContent, count = luaurc:gsub(
-        ',%s*\n%s*"' .. escapedName .. '"%s*:%s*"[^"]*"',
-        ''
-    )
+    local newContent, count = luaurc:gsub(',%s*\n%s*"' .. escapedName .. '"%s*:%s*"[^"]*"', "")
 
     if count == 0 then
-        newContent, count = luaurc:gsub(
-            '"' .. escapedName .. '"%s*:%s*"[^"]*",%s*\n%s*',
-            ''
-        )
+        newContent, count = luaurc:gsub('"' .. escapedName .. '"%s*:%s*"[^"]*",%s*\n%s*', "")
     end
 
     if count == 0 then
-        newContent, count = luaurc:gsub(
-            '"' .. escapedName .. '"%s*:%s*"[^"]*"%s*\n?%s*',
-            ''
-        )
+        newContent, count = luaurc:gsub('"' .. escapedName .. '"%s*:%s*"[^"]*"%s*\n?%s*', "")
     end
 
     if count > 0 then
