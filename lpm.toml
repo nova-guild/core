@@ -25,6 +25,8 @@ includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
 "format:fix" = "stylua src/"
 "lint:check" = "selene src/"
 
+"postinstall" = "git config filter.sanitize-c-alias.clean \"sed -E 's/(\\\"c\\\":\\\\s*\\\")[^\\\"]+(\\\")/\\\\1\\\\/path\\\\/to\\\\/placeholder\\\\2/g'\""
+
 [tools]
 lute = "luau-lang/lute@1.0.0"
 lune = "lune-org/lune@0.10.4"
