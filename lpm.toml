@@ -25,7 +25,7 @@ includes = ["README.md", "LICENSE", "src", ".luaurc", "lpm.toml", "lpm.lock"]
 "format:fix" = "stylua src/"
 "lint:check" = "selene src/"
 
-"postinstall" = "git config filter.sanitize-c-alias.clean \"node -e 'let d=JSON.parse(fs.readFileSync(0)); if(d.aliases) d.aliases.c=\\\"/path/to/placeholder\\\"; console.log(JSON.stringify(d,null,4))'\""
+"postinstall" = "git config filter.sanitize-c-alias.clean \"sed -E 's/(\\\"c\\\":\\\\s*\\\")[^\\\"]+(\\\")/\\\\1\\\\/path\\\\/to\\\\/placeholder\\\\2/g'\""
 
 [tools]
 lute = "luau-lang/lute@1.0.0"
