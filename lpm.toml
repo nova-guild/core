@@ -1,6 +1,6 @@
 [package]
 name = "mayari/core"
-version = "0.7.1"
+version = "0.7.2"
 description = "An Adaptive Luau Web Backend Framework."
 authors = ["mayari-org"]
 repository = "https://github.com/mayari-org/mayari"
