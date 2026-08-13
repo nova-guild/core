@@ -12,13 +12,13 @@ local Alias = {}
     @param name The name of the alias.
     @param value The value the alias should point to.
 ]]
-function Alias.set(name: string, value: string)
-    local luauarcPath = process.cwd .. "/.luaurc"
+function Alias.set(name: string, value: string, rcFile: string?)
+    local luauarcPath = if rcFile then rcFile else process.cwd .. ".luaurc"
     local luaurc = fs.readFile(luauarcPath)
 
     if luaurc:find('"' .. name .. '"') then
         luaurc = luaurc:gsub('("' .. name .. '"%s*:%s*)"[^"]*"', '%1"' .. value .. '"')
-        fs.writeFile(".luaurc", luaurc)
+        fs.writeFile(luauarcPath, luaurc)
     else
         local aliasStart = luaurc:find('"aliases"') :: number
         local blockClose = luaurc:find("}", aliasStart) :: number
@@ -40,7 +40,7 @@ function Alias.set(name: string, value: string)
             .. closeIndent
             .. luaurc:sub(blockClose)
 
-        fs.writeFile(".luaurc", luaurc)
+        fs.writeFile(luauarcPath, luaurc)
     end
 end
 
