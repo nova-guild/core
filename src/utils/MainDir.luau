@@ -1,1 +1,1 @@
-return "src/app"
+return ".mayari/src/app"
